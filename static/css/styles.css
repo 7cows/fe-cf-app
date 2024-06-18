@@ -1,0 +1,62 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  
+  th, td {
+    text-align: center;
+    padding: 8px;
+  }
+    
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  th {
+    background-color: #515b51;
+    color: white;
+  }
+
+
+  .leftAlignedColumnTable .col-md-4 {
+    text-align: left;
+    width: 33.33%;
+  }
+  
+  .leftAlignedColumnTable .col-md-6 {
+    text-align: left;
+    width: 50%;
+  }
+  
+  .leftAlignedColumnTable .col-md-2 {
+    text-align: left;
+    width: 16.66%;
+  }
+  
+
+.input-sign-wrapper {
+  position: relative;
+}
+
+.input-sign-wrapper::before {
+  content: attr(data-sign);
+  top: 50%;
+  left: 1px;
+  position: absolute;
+  transform: translateY(-50%);
+  color: grey;
+}
+
+.input-sign {
+  margin-left: 30px; /* if padding-left is not effective */
+  /* or */
+  text-indent: 30px; /* if margin-left is not suitable */
+}
+
+.error {
+  border-color: red; /* makes the border red */
+  background-color: #ffdddd; /* light red background */
+  /* any other styles you want to apply to elements in an error state */
+}

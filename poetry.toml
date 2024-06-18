@@ -1,0 +1,3 @@
+[virtualenvs]
+path = "/Users/lab/venvs/fe-cf-app"
+in-project = false

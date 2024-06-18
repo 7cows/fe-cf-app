@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">{% endblock %}
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VPSLMP67SX"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-VPSLMP67SX');
+    </script>
+
+    <!-- local
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper-1.16.0.min.js') }}"></script>
+    -->
+    
+    <meta charset="UTF-8">
+    {% block deps %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% block footer %}
+    <div class="container" style="margin-top: 30px;">
+    <div class="row">
+        <div class="col-sm-1">
+            <!-- left column -->
+        </div>
+        <div class="col-md-10">
+            <footer class="bg-light text-dark">   
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-3 text-left">
+                            © 2023-2024, 7cows.io v{{ version }}
+                        </div>
+                        <div class="col-sm-3 text-center">
+                            <a href="https://twitter.com/ugly7cows"><img src="{{ url_for('static', filename='twitter-blue.svg') }}" alt="@ugly7cows" width="15px" height="15px">@ugly7cows</a>
+                        </div>
+                        <div class="col-sm-3 text-center"><a href="7cows.substack.com">substack</a></div>
+                        <div class="col-sm-3 text-right">
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div>No guarantee given, any responsibility excluded</div>
+                    </div>
+                    </div>   
+                
+            </footer> 
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <!-- right column -->
+    </div> 
+    </div>
+    {% endblock %}
+</body>
+</html>

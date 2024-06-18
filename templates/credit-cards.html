@@ -1,0 +1,98 @@
+{% extends 'results.html' %}
+
+{% block left %}
+    <h3>Optimize:</h3>
+    <div class="d-flex flex-column">
+        <div class="d-flex flex-column">
+            <button type="button" id="exampleButton" class="btn btn-dark mb-2"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Example of (credit cards, car loans etc) loans portfolio"
+            >Example</button>
+            <button type="button" id="originalButton" class="btn btn-primary mb-2"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Original portfolio without optimization"
+            >Original</button>
+            <button type="button" id="avalancheButton" class="btn btn-success mb-2"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Optimize to pay off the highest interest rate first"
+            >Avalanche</button>
+            <button type="button" id="snowballButton" class="btn btn-warning mb-2"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Optimize to pay off the lowest outstanding balance first"
+            >Snowball</button>
+            <button type="button" id="worstButton" class="btn btn-danger"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Pay off the lowest interest rate first (the worst approach - just for comparison)"
+            >Worst</button>
+        </div>
+        <div>
+            <input type="checkbox" id="keepSchedule" name="keepSchedule"
+            data-toggle="tooltip" data-placement="left"
+            data-title="Optimize under the condition of keeping the original payments schedule.">
+            <label for="keepSchedule">Keep the payments schedule</label>
+        </div>    
+    </div>
+    
+    <script>
+    function redirectToOptimizationPage(method) {
+        const exampleUrls = [
+            '/CC/5HPsShNXZXP4f1AYSbCLXHFB8iqVxnawRyL6BrwTYpcYGtzbfpkKNQ2Fg2F2dW6pLf8QLsKF33g78WYpUwXgFxnvD8QoauKa19dY9tHjtmBw8j8r2MbyDoQ1CT?P0=10000,30000,20000&desc=creditcard,carloan,studloan',
+            '/CC/4TiQBZ7Gkd49ya3cV9KHwgJWh524aDhjdusDingF1vDXvr1XwphkTa9Fh8EdAWcr1Ugheq86TbX5f1JHSsJk5Tb57mTzb9MGKKg4fVswfzXsbhpv5Z3wfAemHyY4FpqcoKPy5uQ4Bbx9Y9RDu5zk?P0=300000,30000,5000,50000&desc=mortgage,carloan,creditcard,studloan',
+            '/CC/exgKikegHy8XH6ThCyecjnvVJkd5STLtk3jNCbTyg5ixJyuBGiBrxcmwzcQRZhRdqp7WZ5bJUgPsdfVPf5H4PpynYvpsZEvyNU4GDz1J7QhrQRcoiyCK?P0=5000,4000,10000&desc=CC1,CC2,CC3',    
+        ];
+        if (method === 'example'){
+            console.log('Redirecting to an example URL');
+            // Generate a random index based on the length of exampleUrls
+            const randomIndex = Math.floor(Math.random() * exampleUrls.length);
+            // Select a random URL from the exampleUrls array
+            const randomUrl = exampleUrls[randomIndex];
+            // Construct the full URL
+            const HOST_URL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+            // Redirect to the randomly selected example URL
+            window.location.href = HOST_URL + randomUrl;
+            return; // Prevent further execution
+        }
+        if (Object.keys(cashFlows).length < 2) {
+            alert('At least two products are required for this operation.');
+            return;
+        }
+
+        var P0_dct = extractBalance(cashFlows);
+        var P0s = extractSortedValuesByKeys(P0_dct);
+        var HOST_URL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+        var keep = document.getElementById('keepSchedule').checked ? 1 : 0;
+
+        //var hashLink = HOST_URL + '/CC/' + pf_permahash + '?P0=' + P0s;
+        var hashLink = helper_createHashLink('cc', pf_permahash, P0s, HOST_URL, get_descs(cashFlows));
+        if (method !== 'original') {
+            hashLink += '&method=' + method + '&keep=' + keep;
+        }        
+        window.location.href = hashLink;
+    }
+
+    $(document).ready(function() {
+    var check = new URLSearchParams(window.location.search).get('keep');
+    if (check === '1') {
+        $('#keepSchedule').prop('checked', true);
+    }
+
+    // Dynamically create button-to-method mapping
+    var methods = ['avalanche', 'snowball', 'worst', 'original', 'example'];
+    var buttonMethods = {};
+    methods.forEach(function(method) {
+        buttonMethods[method + 'Button'] = method;
+    });
+
+    // Unified event handler
+    $('.btn').click(function() {
+        var method = buttonMethods[this.id];
+        if (method) {
+            redirectToOptimizationPage(method);
+        }
+    });
+});
+
+
+
+    </script>
+{% endblock %}
