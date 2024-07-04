@@ -1,12 +1,36 @@
 stages:
   - install
   - test
+  - e2e_test
 
 cache:
   paths:
     - node_modules/
+    - .cache/pypoetry/
+
+variables:
+  FLASK_APP: app.py  # Adjust as per your Flask app entry point
+  FLASK_ENV: development
+  FLASK_RUN_PORT: 5000
+
+before_script:
+  - apt-get update && apt-get install -y python3-pip python3-dev
+  - pip3 install poetry
+  - poetry config virtualenvs.create false
 
 install_dependencies:
+  stage: install
+  image: python:3.9  # Using a Python image for Flask and Poetry
+  script:
+    - poetry install
+  artifacts:
+    paths:
+      - .venv/
+  cache:
+    paths:
+      - .cache/pypoetry/
+
+install_node_dependencies:
   stage: install
   image: node:latest
   script:
@@ -15,10 +39,36 @@ install_dependencies:
     paths:
       - node_modules/
 
-run_tests:
+start_flask_app:
   stage: test
-  image: node:latest
+  image: python:3.9
   script:
-    - npm test
+    - poetry run flask run --host=0.0.0.0 --port=5000
+  artifacts:
+    paths:
+      - .venv/
+  cache:
+    paths:
+      - .cache/pypoetry/
+  services:
+    - name: postgres:latest  # Example if using PostgreSQL
+      alias: postgres
+  variables:
+    DATABASE_URL: "postgresql://user:password@postgres/dbname"
+
+run_cypress_tests:
+  stage: e2e_test
+  image: cypress/base:latest  # Cypress base image contains all dependencies for running tests
+  services:
+    - name: selenium/standalone-chrome:latest
+      alias: selenium
+  script:
+    - $(npm bin)/cypress run --config baseUrl=http://localhost:5000
   dependencies:
-    - install_dependencies
+    - install_node_dependencies
+    - start_flask_app
+  artifacts:
+    when: always
+    reports:
+      junit: cypress/results/*.xml
+  allow_failure: false

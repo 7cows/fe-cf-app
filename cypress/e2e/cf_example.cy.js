@@ -1,6 +1,6 @@
 describe('Visit 7cows and interact', () => {
   it('clicks on the button and checks field values', () => {
-    cy.visit('https://7cows.io/cf');
+    cy.visit('/cf');
     cy.get('#example-btn-1').click();
 
     cy.wait(1000); // wait for any updates
