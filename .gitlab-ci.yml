@@ -1,86 +1,76 @@
 stages:
-  - install
-  - test
-  - e2e_test
+  - install_node
+  - unit_tests
+  - install_flask
+  - e2e_tests
 
 cache:
+  key: "${CI_COMMIT_REF_SLUG}"
   paths:
     - node_modules/
     - .cache/pypoetry/
+    - .venv/  # Cache the virtual environment to speed up installs
 
 variables:
-  FLASK_APP: app.py  # Adjust as per your Flask app entry point
+  FLASK_APP: app.py
   FLASK_ENV: development
   FLASK_RUN_PORT: 5000
 
-before_script:
-  - apt-get update && apt-get install -y python3-pip python3-dev
-  - pip3 install poetry
-  - poetry config virtualenvs.create false
-
-install_dependencies:
-  stage: install
-  image: python:3.9
-  before_script:
-    - apt-get update && apt-get install -y python3-venv python3-pip
-    - pip3 install pipx
-    - pipx ensurepath
-  script:
-    - pipx install poetry==1.2.0  # Specify the version of Poetry you need
-    - poetry config virtualenvs.create false
-    - poetry install
-  artifacts:
-    paths:
-      - .venv/
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-pip
-    paths:
-      - .cache/pypoetry/
-
 install_node_dependencies:
-  stage: install
+  stage: install_node
   image: node:latest
   script:
     - npm install
   artifacts:
     paths:
       - node_modules/
+  cache:
+    paths:
+      - node_modules/
 
 run_unit_tests:
-  stage: test
+  stage: unit_tests
   image: node:latest
   script:
-    - npm test  # Runs Jest unit tests
+    - npm test
   dependencies:
     - install_node_dependencies
 
-start_flask_app:
-  stage: test
+install_flask_dependencies:
+  stage: install_flask
   image: python:3.9
   script:
-    - poetry run flask run --host=0.0.0.0 --port=5000 &  # Starts Flask in the background
-    - sleep 10  # Gives Flask some time to fully start before running e2e tests
-  artifacts:
-    paths:
-      - .venv/
+    - apt-get update && apt-get install -y python3-venv python3-pip curl
+    - curl -sSL https://install.python-poetry.org | python3 -
+    - export PATH="$PATH:$HOME/.local/bin"
+    - poetry config virtualenvs.create false
+    - poetry install
   cache:
     paths:
+      - .venv/
       - .cache/pypoetry/
 
+start_flask_app:
+  stage: install_flask
+  image: python:3.9
+  script:
+    - poetry run flask run --host=0.0.0.0 --port=5000 &
+    - until curl --output /dev/null --silent --head --fail http://localhost:5000; do
+        echo 'Waiting for Flask app to start...';
+        sleep 5;
+      done
+
 run_cypress_tests:
-  stage: e2e_test
-  image: cypress/base:latest  # Cypress base image contains all dependencies for running tests
+  stage: e2e_tests
+  image: cypress/base:latest
   services:
     - name: selenium/standalone-chrome:latest
       alias: selenium
   script:
     - CYPRESS_BASE_URL=http://localhost:5000 npx cypress run
   dependencies:
-    - install_node_dependencies
     - start_flask_app
   artifacts:
     when: always
     reports:
-      junit: cypress/results/*.xml
-  allow_failure: false
-
+      junit: cypress/results/*.
