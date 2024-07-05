@@ -11,6 +11,7 @@ cache:
     - node_modules/
     - .cache/pypoetry/
     - .venv/  # Cache the virtual environment to speed up installs
+    - /root/.local/
 
 variables:
   FLASK_APP: app.py
@@ -58,8 +59,7 @@ start_flask_app:
   stage: start_flask
   image: python:3.9
   script:
-    - export PATH="$PATH:$HOME/.local/bin"
-    - poetry run flask run --host=0.0.0.0 --port=5000 &
+    - /root/.local/bin/poetry run flask run --host=0.0.0.0 --port=5000 &
     - curl --output /dev/null --silent --head --fail http://localhost:5000
   dependencies:
     - install_flask_dependencies
