@@ -35,7 +35,7 @@ flask_setup_and_run:
     - poetry install
     - poetry run flask run --host=0.0.0.0 --port=5000 &
     - sleep 5  # Give Flask some time to start
-    - curl --output /dev/null --silent --head --fail http://localhost:5000
+    - curl --output /dev/null --silent --head --fail http://127.0.0.1:5000
 
 run_cypress_tests:
   stage: e2e_tests
@@ -44,7 +44,7 @@ run_cypress_tests:
     - name: selenium/standalone-chrome:latest
       alias: selenium
   script:
-    - CYPRESS_BASE_URL=http://localhost:5000 npx cypress run
+    - CYPRESS_BASE_URL=http://127.0.0.1:5000 npx cypress run
   dependencies:
     - flask_setup_and_run
   artifacts:
