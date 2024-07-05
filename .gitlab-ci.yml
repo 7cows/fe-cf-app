@@ -8,6 +8,7 @@ cache:
   key: "${CI_COMMIT_REF_SLUG}"
   paths:
     - node_modules/
+    - .cache/
 
 install_node_dependencies:
   stage: install_node
@@ -17,6 +18,7 @@ install_node_dependencies:
   artifacts:
     paths:
       - node_modules/
+      - .cache/ # Cypress
     expire_in: 1 hour
 
 run_unit_tests:
