@@ -1,20 +1,8 @@
 stages:
   - install_node
   - unit_tests
-  - install_flask
-  - start_flask
+  - flask_setup
   - e2e_tests
-
-cache:
-  key: "${CI_COMMIT_REF_SLUG}"
-  paths:
-    - node_modules/
-    - /root/.local/
-
-variables:
-  FLASK_APP: app.py
-  FLASK_ENV: development
-  FLASK_RUN_PORT: 5000
 
 install_node_dependencies:
   stage: install_node
@@ -36,38 +24,18 @@ run_unit_tests:
   dependencies:
     - install_node_dependencies
 
-install_flask_dependencies:
-  stage: install_flask
+flask_setup_and_run:
+  stage: flask_setup
   image: python:3.9
   script:
-    - whoami
-    - echo $HOME
-    - echo $PATH
     - apt-get update && apt-get install -y python3-venv python3-pip curl
     - curl -sSL https://install.python-poetry.org | python3 -
     - export PATH="$PATH:$HOME/.local/bin"
-    - /root/.local/bin/poetry --version
+    - poetry --version
     - poetry install
-    - ls -la $HOME/.local/
-    - ls -la $HOME/.local/bin/
-  cache:
-    paths:
-      - /root/.local/
-
-start_flask_app:
-  stage: start_flask
-  image: python:3.9
-  script:
-    - export PATH="$PATH:$HOME/.local/bin"
-    - echo $PATH
-    - ls -la $HOME/.local/
-    - ls -la $HOME/.local/bin/
-    - /root/.local/bin/poetry --version
-    - /root/.local/bin/poetry run flask run --host=0.0.0.0 --port=5000 &
+    - poetry run flask run --host=0.0.0.0 --port=5000 &
     - sleep 5  # Give Flask some time to start
     - curl --output /dev/null --silent --head --fail http://localhost:5000
-  dependencies:
-    - install_flask_dependencies
 
 run_cypress_tests:
   stage: e2e_tests
@@ -78,7 +46,7 @@ run_cypress_tests:
   script:
     - CYPRESS_BASE_URL=http://localhost:5000 npx cypress run
   dependencies:
-    - start_flask_app
+    - flask_setup_and_run
   artifacts:
     when: always
     reports:
