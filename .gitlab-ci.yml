@@ -8,7 +8,7 @@ cache:
   key: "${CI_COMMIT_REF_SLUG}"
   paths:
     - node_modules/
-    - .cache/
+    - .cache/Cypress
 
 install_node_dependencies:
   stage: install_node
@@ -18,7 +18,6 @@ install_node_dependencies:
   artifacts:
     paths:
       - node_modules/
-      - .cache/ # Cypress
     expire_in: 1 hour
 
 run_unit_tests:
@@ -51,3 +50,8 @@ run_cypress_tests:
   dependencies:
     - install_node_dependencies  # Ensure this includes install_node_dependencies
     - flask_setup_and_run
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    paths:
+      - node_modules/
+      - .cache/Cypress  # Ensure Cypress binary is accessible
