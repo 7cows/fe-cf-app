@@ -63,6 +63,7 @@ start_flask_app:
     - export PATH="$PATH:$HOME/.local/bin"
     - echo $PATH
     - ls -la $HOME/.local/bin
+    - ls -la $HOME/.local/
     - poetry --version
     - poetry run flask run --host=0.0.0.0 --port=5000 &
     - sleep 5  # Give Flask some time to start
