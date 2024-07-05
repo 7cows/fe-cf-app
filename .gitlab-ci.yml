@@ -4,6 +4,11 @@ stages:
   - flask_setup
   - e2e_tests
 
+cache:
+  key: "${CI_COMMIT_REF_SLUG}"
+  paths:
+    - node_modules/
+
 install_node_dependencies:
   stage: install_node
   image: node:latest
@@ -12,9 +17,7 @@ install_node_dependencies:
   artifacts:
     paths:
       - node_modules/
-  cache:
-    paths:
-      - node_modules/
+    expire_in: 1 hour
 
 run_unit_tests:
   stage: unit_tests
@@ -40,15 +43,9 @@ flask_setup_and_run:
 run_cypress_tests:
   stage: e2e_tests
   image: cypress/base:latest
-  services:
-    - name: selenium/standalone-chrome:latest
-      alias: selenium
   script:
-    - CYPRESS_BASE_URL=http://127.0.0.1:5000 npx cypress run
+    - export CYPRESS_BASE_URL=http://localhost:5000
+    - npx cypress run
   dependencies:
+    - install_node_dependencies  # Ensure this includes install_node_dependencies
     - flask_setup_and_run
-  artifacts:
-    when: always
-    reports:
-      junit: cypress/results/*.xml
-  allow_failure: false
