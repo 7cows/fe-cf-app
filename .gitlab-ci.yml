@@ -1,13 +1,7 @@
 stages:
   - install_node
   - unit_tests
-  - flask_setup
-  - e2e_tests
-
-cache:
-  key: "${CI_COMMIT_REF_SLUG}"
-  paths:
-    - node_modules/
+  - flask_and_cypress
 
 install_node_dependencies:
   stage: install_node
@@ -27,30 +21,28 @@ run_unit_tests:
   dependencies:
     - install_node_dependencies
 
-flask_setup_and_run:
-  stage: flask_setup
-  image: python:3.9
+flask_and_cypress:
+  stage: flask_and_cypress
+  image: cypress/base:latest  # This image needs to have Python installed or installable
+  services:
+    - name: selenium/standalone-chrome:latest
+      alias: selenium
   script:
-    - apt-get update && apt-get install -y python3-venv python3-pip curl
+    - apt-get update && apt-get install -y python3 python3-venv python3-pip curl  # Install Python and pip
     - curl -sSL https://install.python-poetry.org | python3 -
     - export PATH="$PATH:$HOME/.local/bin"
     - poetry --version
     - poetry install
     - poetry run flask run --host=0.0.0.0 --port=5000 &
     - sleep 5  # Give Flask some time to start
-    - curl --output /dev/null --silent --head --fail http://127.0.0.1:5000/cf
-
-run_cypress_tests:
-  stage: e2e_tests
-  image: cypress/base:latest
-  script:
+    - curl --output /dev/null --silent --head --fail http://127.0.0.1:5000/cf  # Verify Flask is running
     - export CYPRESS_BASE_URL=http://127.0.0.1:5000
-    - npx cypress install
+    - npm ci --prefix .  # Install Cypress dependencies if not found
     - npx cypress run
   dependencies:
-    - install_node_dependencies  # Ensure this includes install_node_dependencies
-    - flask_setup_and_run
+    - install_node_dependencies
   cache:
     key: "${CI_COMMIT_REF_SLUG}"
     paths:
       - node_modules/
+      - .cache/Cypress
