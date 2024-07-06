@@ -44,7 +44,7 @@ run_cypress_tests:
   stage: e2e_tests
   image: cypress/base:latest
   script:
-    - export CYPRESS_BASE_URL=http://localhost:5000
+    - export CYPRESS_BASE_URL=http://127.0.0.1:5000
     - npx cypress install
     - npx cypress run
   dependencies:
