@@ -8,7 +8,6 @@ cache:
   key: "${CI_COMMIT_REF_SLUG}"
   paths:
     - node_modules/
-    - .cache/Cypress
 
 install_node_dependencies:
   stage: install_node
@@ -46,8 +45,6 @@ run_cypress_tests:
   image: cypress/base:latest
   script:
     - export CYPRESS_BASE_URL=http://localhost:5000
-    - echo "Checking Cypress cache directory"
-    - ls -la /root/.cache/Cypress
     - npx cypress install
     - npx cypress run
   dependencies:
@@ -57,4 +54,3 @@ run_cypress_tests:
     key: "${CI_COMMIT_REF_SLUG}"
     paths:
       - node_modules/
-      - .cache/Cypress  # Ensure Cypress binary is accessible
