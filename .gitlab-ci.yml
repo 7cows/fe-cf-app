@@ -46,6 +46,9 @@ run_cypress_tests:
   image: cypress/base:latest
   script:
     - export CYPRESS_BASE_URL=http://localhost:5000
+    - echo "Checking Cypress cache directory"
+    - ls -la /root/.cache/Cypress
+    - npx cypress install
     - npx cypress run
   dependencies:
     - install_node_dependencies  # Ensure this includes install_node_dependencies
