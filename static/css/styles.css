@@ -1,43 +1,85 @@
+/* Define custom properties for color schemes in the root */
+:root {
+  --bg-color: #fff;  /* Light mode background color */
+  --text-color: #000;  /* Light mode text color */
+  --alt-bg-color: #f2f2f2; /* Light mode alternative background for even table rows */
+  --header-bg-color: #515b51; /* Light mode table header background */
+  --header-text-color: white; /* Light mode table header text color */
+  --input-sign-color: grey; /* Light mode input sign color */
+  --error-border-color: red; /* Light mode error border color */
+  --error-bg-color: #ffdddd; /* Light mode error background color */
+}
+
+/* Regular styles for light mode */
+.card {
+  background-color: #fff; /* Light background for cards */
+  color: #212529; /* Dark text for light background */
+}
+
+/* Dark theme adjustments using prefers-color-scheme media query */
+@media (prefers-color-scheme: dark) {
+  :root {
+      --bg-color: #3b3b3b; /* Dark mode background color */
+      --text-color: #ccc; /* Dark mode text color */
+      --alt-bg-color: #1e1e1e; /* Dark mode alternative background for even table rows */
+      --header-bg-color: #666; /* Dark mode table header background */
+      --header-text-color: #ddd; /* Dark mode table header text color */
+      --input-sign-color: lightgray; /* Dark mode input sign color */
+      --error-border-color: darkred; /* Dark mode error border color */
+      --error-bg-color: #553333; /* Dark mode error background color */
+  }
+  .card {
+    background-color: #5b5b5b; /* Dark background for cards */
+    color: #ccc; /* Light text for dark background */
+    border-color: #444; /* Slightly lighter border to make the card distinguishable */
+  }
+  .card-header {
+      background-color: #444; /* Slightly different background for the header to stand out */
+      color: #ddd; /* Light text for headers in dark mode */
+  }
+  .card-body {
+      border-top: 1px solid #555; /* Subtle top border for aesthetics */
+  }
+
+  .bg-light {
+    background-color: #343a40 !important; /* Dark background for what was light */
+    color: #ffffff !important; /* Ensure text is visible on dark backgrounds */
+  }
+  .text-dark {
+    color: #ffffff !important; /* Light text for dark backgrounds */
+  }
+}
+
+/* Base element styles using custom properties */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  
-  th, td {
-    text-align: center;
-    padding: 8px;
-  }
-    
+  border-collapse: collapse;
+  width: 100%;
+}
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+th, td {
+  text-align: center;
+  padding: 8px;
+  color: var(--text-color); /* Ensures text color is consistent */
+}
 
-  th {
-    background-color: #515b51;
-    color: white;
-  }
+tr:nth-child(even) {
+  background-color: var(--alt-bg-color);
+}
 
+th {
+  background-color: var(--header-bg-color);
+  color: var(--header-text-color);
+}
 
-  .leftAlignedColumnTable .col-md-4 {
-    text-align: left;
-    width: 33.33%;
-  }
-  
-  .leftAlignedColumnTable .col-md-6 {
-    text-align: left;
-    width: 50%;
-  }
-  
-  .leftAlignedColumnTable .col-md-2 {
-    text-align: left;
-    width: 16.66%;
-  }
-  
-
-.input-sign-wrapper {
-  position: relative;
+.leftAlignedColumnTable .col-md-4,
+.leftAlignedColumnTable .col-md-6,
+.leftAlignedColumnTable .col-md-2 {
+  text-align: left;
 }
 
 .input-sign-wrapper::before {
@@ -46,17 +88,15 @@ table {
   left: 1px;
   position: absolute;
   transform: translateY(-50%);
-  color: grey;
+  color: var(--input-sign-color);
 }
 
 .input-sign {
-  margin-left: 30px; /* if padding-left is not effective */
-  /* or */
-  text-indent: 30px; /* if margin-left is not suitable */
+  margin-left: 30px;
+  text-indent: 30px;
 }
 
 .error {
-  border-color: red; /* makes the border red */
-  background-color: #ffdddd; /* light red background */
-  /* any other styles you want to apply to elements in an error state */
+  border-color: var(--error-border-color);
+  background-color: var(--error-bg-color);
 }
