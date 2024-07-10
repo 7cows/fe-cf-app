@@ -30,11 +30,32 @@ Note that it's a dummy flask application. It uses the endpoints from [7cows.io](
 Tests leverage the nodejs' 'jest' framework, first install the necessary `nodejs` modules:
 
 ```bash
-npm install --save-dev
+npm install
 ```
 
-Run the tests:
+Run the unit tests:
 
 ```bash
 npm test
 ```
+
+Additionally, one can test UI with cypress:
+
+```bash
+npx cypress run
+```
+
+## How to contribute
+
+Issues are to be raised and bugs to be reported on [github](https://github.com/7cows/fe-cf-app/issues), code is to be contributed on [gitlab](https://gitlab.com/7cows/fe-cf-app/issues). 
+
+### Issues/bugs
+
+There's an issues tracker open to public set up at https://github.com/7cows/fe-cf-app/issues
+If you face an error or a bug on [7cows.io](https://7cows.io), please raise it there.
+
+### Code
+
+The code could be contributed on [gitlab.com/7cows/fe-cf-app](https://gitlab.com/7cows/fe-cf-app)
+To avoid the work in vain, at best, it should follow some issue or the need for such a change should be consulted upfront.
+
