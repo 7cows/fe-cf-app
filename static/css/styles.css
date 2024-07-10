@@ -12,7 +12,7 @@
 
 /* Regular styles for light mode */
 .card {
-  background-color: #fff; /* Light background for cards */
+  background-color: #fafafa; /* Light background for cards */
   color: #212529; /* Dark text for light background */
 }
 
