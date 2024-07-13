@@ -1,7 +1,7 @@
 const elementKeys = ['P0', 'short_desc', 'r', 'T', 'A', 'n','shift', 'minimumPayment', 'compounding', 'remaining_debt','paydown'];
 
-function constructFormElementsHtml(id, settings, pivot) {
-    let formElements = getFormElements(id);        
+function constructFormElementsHtml(id, settings, translations, pivot) {
+    let formElements = getFormElements(id, translations);        
     let formElementsHtml = elementKeys.map((key, index) => {
         return settings[index] === pivot ? formElements[key] : '';
     }).join('');
@@ -12,7 +12,7 @@ function getFormElements(id){
     let dct = {
         'short_desc': `
         <tr>
-            <td class="col-md-4">(optional) Description</td>
+            <td class="col-md-4">${translations['short_desc']}</td>
             <td class="col-md-6">
                 <input type="text" id="short_descDisplay-${id}" class="form-control" value="" placeholder="e.g. car loan" maxlength="10">
             </td>
@@ -25,7 +25,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                    Principal:
+                    ${translations['P0']}:
                 </strong>
             </td>
             <td class="col-md-6">
@@ -44,7 +44,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                    Interest rate:
+                    ${translations['r']}:
                 </strong>
             </td>
             <td class="col-md-6">
@@ -60,7 +60,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                Loan Maturity:
+                ${translations['T']}:
                 </strong>
             </td>
             <td class="col-md-6"
@@ -90,7 +90,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                    Regular payment:
+                    ${translations['A']}:
                 </strong>
             </td>
             <td class="col-md-6">
@@ -109,7 +109,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                    Frequency:
+                    ${translations['n']}:
                 </strong>
             </td>
             <td class="col-md-6" colspan="3">
@@ -122,7 +122,11 @@ function getFormElements(id){
         `,
         'shift': `
         <tr>
-            <td class="col-md-4"><strong>Delay payback:</strong></td>
+            <td class="col-md-4">
+                <strong>
+                    ${translations['shift']}:
+                </strong>
+            </td>
             <td class="col-md-6">
                 <div class="dropdown d-inline">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="shift_YearsDropdown-${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">0 years</button>
@@ -148,7 +152,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                Minimal payment:
+                 ${translations['minimumPayment']}:
                 </strong>
             </td>
             <td class="col-md-6">
@@ -164,7 +168,11 @@ function getFormElements(id){
         `,
         'compounding': `
         <tr>
-            <td class="col-md-4"><strong>Simple compounding:</strong></td>
+            <td class="col-md-4">
+                <strong>
+                    ${translations['compounding']}:
+                </strong>
+            </td>
             <td class="col-md-6"><input class="form-check-input" type="checkbox" value="" id="compounding-${id}" unchecked></td>
             <td class="col-md-2"></td>
         </tr>        
@@ -173,7 +181,7 @@ function getFormElements(id){
         <tr>
             <td class="col-md-4">
                 <strong>
-                Remaining debt:
+                ${translations['remaining_debt']}:
                 </strong>
             </td>
             <td class="col-md-6">
@@ -190,7 +198,11 @@ function getFormElements(id){
         `,
         'paydown': `
         <tr>
-            <td class="col-md-4"><strong>Pay down to zero:</strong></td>
+            <td class="col-md-4">
+                <strong>
+                    ${translations['paydown']}:
+                </strong>
+            </td>
             <td class="col-md-6"><input class="form-check-input" type="checkbox" value="" id="zeropaydown-${id}" checked></td>
             <td class="col-md-2"></td>
         </tr>        
@@ -213,7 +225,7 @@ const htmlElements = {
       </div>`;
     },
     'opt_params': function(id, settings='111112222') {
-        let formElementsHtml = constructFormElementsHtml(id, settings, '2');
+        let formElementsHtml = constructFormElementsHtml(id, settings, translations, '2');
         
         return `<div id="card-extra-${id}" class="card card-info">
           <div class="card-header">
@@ -232,7 +244,7 @@ const htmlElements = {
         </div>`;
       },
     'annuity_table': function(id, settings='111112222') {
-        let formElementsHtml = constructFormElementsHtml(id, settings, '1');
+        let formElementsHtml = constructFormElementsHtml(id, settings, translations, '1');
     
         return `
         <table class="table table-hover leftAlignedColumnTable">

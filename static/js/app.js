@@ -6,6 +6,20 @@ let hashes = {};
 let productTypes = {};
 let pf_permahash = '';
 let form_settings = '10111100000';
+let card_translations = {
+  'short_desc': "Description",
+  'P0': "Principal",
+  'r': "Interest Rate",
+  'T': "Loan Maturity",
+  'A': "Regular payment",
+  'n': "Frequency",
+  'shift': "Delay payback",
+  'minimumPayment': "Minimal payment",
+  'compounding': "Compounding",
+  'remaining_debt': "Remaining debt",
+  'paydown': "Pay down to zero",
+}
+
 API_ENDPOINT = typeof API_ENDPOINT !== 'undefined' ? API_ENDPOINT : '';
 
 

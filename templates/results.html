@@ -24,9 +24,10 @@
     cashFlows = {};
 
     let parameterized_form_settings = '{{ form_settings | safe }}';
-    console.log("results.html/parameterized_form_settings: ", parameterized_form_settings);
-    if (parameterized_form_settings){
-      form_settings = parameterized_form_settings;
+    //console.log("results.html/parameterized_form_settings: ", parameterized_form_settings);
+    let parameterized_card_translation = '{{ translations | safe }}';
+    if (parameterized_card_translation){
+      translations = card_translation;
     }
 
     //console.log("results.html/sumCashFlows (expect: {}): ", sumCashFlows);
