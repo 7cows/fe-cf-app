@@ -8,12 +8,16 @@ def inject_translator():
     # This makes `tr` available in the templates
     return dict(tr=tr)
 
-@babel.localeselector
 def get_locale():
     # always use English in frontend dev
     return 'en'
 
-babel = Babel(app)
+def get_timezone():
+    user = getattr(g, 'user', None)
+    if user is not None:
+        return user.timezone
+
+babel = Babel(app, locale_selector=get_locale, timezone_selector=get_timezone)
 
 # Serve HTML templates
 @app.route("/cf")
