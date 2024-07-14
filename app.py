@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory
-from flask_babel import Babel
+from flask_babel import Babel, _ as tr
 from utils import get_translations
 
 app = Flask(__name__)
