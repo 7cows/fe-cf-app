@@ -15,7 +15,7 @@ def get_translations():
             'paydown': tr("Pay down to zero"),
             'Parameter': tr("Parameter"),
             'Value': tr("Value"),
-            'Derive': tr("Derive"),
+            'Derive': tr("Find"),
             'Calculate': tr("Calculate"),
             'Example': tr("Example"),
         }
