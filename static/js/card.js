@@ -8,7 +8,7 @@ function constructFormElementsHtml(id, settings, translations, pivot) {
     return formElementsHtml;
 }
 
-function getFormElements(id){
+function getFormElements(id, translations){
     let dct = {
         'short_desc': `
         <tr>
