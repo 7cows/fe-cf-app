@@ -31,7 +31,7 @@ function getFormElements(id, translations){
             <td class="col-md-6">
                 <div class="input-sign-wrapper" data-sign="$">
                     <input type="text" id="P0Display-${id}" class="form-control currency-input" value="" placeholder="e.g. 500'000"
-                    data-toggle="tooltip" title="The total amount of money borrowed or the remaining loan balance you need to repay" data-placement='left'>
+                    data-toggle="tooltip" title="${translations['The total amount of money borrowed or the remaining loan balance you need to repay']}" data-placement='left'>
                 </div>
                 <input type="hidden" id="P0-${id}" name="P0" value="">
             </td>
@@ -50,7 +50,7 @@ function getFormElements(id, translations){
             <td class="col-md-6">
                 <div class="input-sign-wrapper" data-sign="%">
                 <input type="text" id="r-${id}" class="form-control" value="" placeholder="e.g. 4" disabled=""
-                data-toggle="tooltip" title="The percentage charged on the principal by the lender, representing the cost of borrowing" data-placement='left'>
+                data-toggle="tooltip" title="${translations['The percentage charged on the principal by the lender, representing the cost of borrowing']}" data-placement='left'>
                 </div>
             </td>
             <td class="col-md-2"><input type="radio" id="rbr-${id}" name="AnnuityFreeParameter" value="2" onclick="chooseAnnFreeParameter(this, ${id});" checked=""></td>
@@ -65,7 +65,7 @@ function getFormElements(id, translations){
             </td>
             <td class="col-md-6"
             
-            data-toggle="tooltip" title="The period until the final payment is due" data-placement='left'>
+            data-toggle="tooltip" title="${translations['The period until the final payment is due']}" data-placement='left'>
                 <div class="dropdown d-inline">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="T_YearsDropdown-${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">10 years</button>
                     <div class="dropdown-menu" aria-labelledby="T_YearsDropdown-${id}">
@@ -96,7 +96,7 @@ function getFormElements(id, translations){
             <td class="col-md-6">
             <div class="input-sign-wrapper" data-sign="$">
                     <input type="text" id="ADisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
-                    data-toggle="tooltip" title="The amount of money paid back to the lender at regular intervals" data-placement='left'>
+                    data-toggle="tooltip" title="${translations['The amount of money paid back to the lender at regular intervals']}" data-placement='left'>
                 </div>
                 <input type="hidden" id="A-${id}" name="A" value="">
             </td>
@@ -114,7 +114,7 @@ function getFormElements(id, translations){
             </td>
             <td class="col-md-6" colspan="3">
                 <input type="range" id="nSlider-${id}" name="annFreqVisual" min="1" max="3" value="3" class="custom-range" onchange="updateFrequencyLabel(this.value, ${id})"
-                data-toggle="tooltip" title="How often payments are made, e.g., monthly or quarterly, affecting the total interest paid and the speed of loan repayment." data-placement='left'>
+                data-toggle="tooltip" title="${translations['How often payments are made, e.g., monthly or quarterly, affecting the total interest paid and the speed of loan repayment.']}" data-placement='left'>
                 <span id="frequencyLabel-${id}">Monthly</span>
                 <input type="hidden" id="n-${id}" name="n" value="12">
             </td>
@@ -214,7 +214,7 @@ const htmlElements = {
       return `<div id="card-info-${id}" class="card card-info" style="display: none">
         <div class="card-header">
             KPIs <a data-toggle="collapse" data-target="#collapseKPIs-${id}" href="#collapseKPIs-${id}" class="collapsed">
-                <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="Show details">+</span>
+                <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="${translations['Show details']}">+</span>
             </a>
         </div>
         <div id="collapseKPIs-${id}" class="card-collapse collapse">
@@ -230,7 +230,7 @@ const htmlElements = {
         return `<div id="card-extra-${id}" class="card card-info">
           <div class="card-header">
               Optional parameters <a data-toggle="collapse" data-target="#collapseExtras-${id}" href="#collapseExtras-${id}" class="collapsed">
-                  <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="Show details">+</span>
+                  <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="${translations['Show details']}">+</span>
               </a>
           </div>
           <div id="collapseExtras-${id}" class="card-collapse collapse">
@@ -264,11 +264,11 @@ const htmlElements = {
                         <input type="hidden" id="productType-${id}" value="annuity"> <!-- or value="deposit" -->
                         <button data-product-id="${id}" class="btn btn-success calc-product" type="submit" id="search-btn-${id}"
                             data-toggle="tooltip" data-placement="bottom"
-                            data-title="calculate the visible loan, fill derived parameter and update KPIs"
+                            data-title="${translations['calculate the visible loan, fill derived parameter and update KPIs']}"
                         >${translations['Calculate']}</button>
                         <button data-product-id="${id}" class="btn btn-dark calc-example" type="submit" id="example-btn-${id}"
                             data-toggle="tooltip" data-placement="bottom"
-                            data-title="a random example of a loan"
+                            data-title="${translations['a random example of a loan']}"
                         >${translations['Example']}</button>
                     </td>
                 </tr>
@@ -285,15 +285,15 @@ const htmlElements = {
             <div class="card-header">
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownProductButton-${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-product-type="annuity">
-                        Annuity
+                        ${translations['Amortizing loan']}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownProductButton-${id}">
-                        <a class="dropdown-item annuity-switch" href="#" data-value="${id}">Annuity</a>
-                        <a class="dropdown-item rd-switch" href="#" data-value="${id}">Recurring Deposit</a>
+                        <a class="dropdown-item annuity-switch" href="#" data-value="${id}">${translations['Amortizing loan']}</a>
+                        <a class="dropdown-item rd-switch" href="#" data-value="${id}">${translations['Savings plan']}</a>
                     </div>
                 </div>
                     <a data-toggle="collapse" data-target="#collapseAnnuity-${id}" href="#collapseAnnuity-${id}" class="" aria-expanded="true">
-                        <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="Show details">-</span>
+                        <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="${translations['Show details']}">-</span>
                     </a>
                 <div id="permahash-${id}"></div>                 
             </div>
