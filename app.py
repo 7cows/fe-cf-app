@@ -2,7 +2,6 @@ from flask import Flask, render_template, send_from_directory
 from flask_babel import Babel, _ as tr
 
 app = Flask(__name__)
-babel = Babel(app)
 
 @app.context_processor
 def inject_translator():
@@ -14,6 +13,7 @@ def get_locale():
     # always use English in frontend dev
     return 'en'
 
+babel = Babel(app)
 
 # Serve HTML templates
 @app.route("/cf")
