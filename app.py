@@ -1,5 +1,5 @@
 from flask import Flask, render_template, send_from_directory
-from flask_babel import Babel, _ as tr
+from flask_babel import Babel
 
 app = Flask(__name__)
 
@@ -40,22 +40,6 @@ def cc():
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
-
-def get_translations():
-    translations = {
-            'short_desc': tr("Description"),
-            'P0': tr("Principal"),
-            'r': tr("Interest Rate"),
-            'T': tr("Loan Maturity"),
-            'A': tr("Regular payment"),
-            'n': tr("Frequency"),
-            'shift': tr("Delay payback"),
-            'minimumPayment': tr("Minimal payment"),
-            'compounding': tr("Compounding"),
-            'remaining_debt': tr("Remaining debt"),
-            'paydown': tr("Pay down to zero"),
-        }
-    return translations
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -250,9 +250,11 @@ const htmlElements = {
         <table class="table table-hover leftAlignedColumnTable">
             <thead>
                 <tr>
-                    <th class="col-md-4">Parameter</th>
-                    <th class="col-md-6">Value</th>
-                    <th class="col-md-2"><a href="#" style="color: inherit; text-decoration: none;" data-toggle="tooltip" title="Choose which parameter will be calculated (derived) with the rest being fixed" data-placement='right'>Derive</a></th>
+                    <th class="col-md-4">${translations['Parameter']}</th>
+                    <th class="col-md-6">${translations['Value']}</th>
+                    <th class="col-md-2"><a href="#" style="color: inherit; text-decoration: none;" data-toggle="tooltip" title="Choose which parameter will be calculated (derived) with the rest being fixed" data-placement='right'>
+                    ${translations['Find']}
+                    </a></th>
                 </tr>
             </thead>
             <tbody>
@@ -263,11 +265,11 @@ const htmlElements = {
                         <button data-product-id="${id}" class="btn btn-success calc-product" type="submit" id="search-btn-${id}"
                             data-toggle="tooltip" data-placement="bottom"
                             data-title="calculate the visible loan, fill derived parameter and update KPIs"
-                        >Calculate</button>
+                        >${translations['Calculate']}</button>
                         <button data-product-id="${id}" class="btn btn-dark calc-example" type="submit" id="example-btn-${id}"
                             data-toggle="tooltip" data-placement="bottom"
                             data-title="a random example of a loan"
-                        >Example</button>
+                        >${translations['Example']}</button>
                     </td>
                 </tr>
             </tbody>
