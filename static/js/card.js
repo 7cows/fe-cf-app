@@ -279,34 +279,34 @@ const htmlElements = {
     ,
     'card': function(id, table, kpi, opt_params='') {
         return `
-<form id="product-form-${id}">
-    <div class="row">    
-        <div class="card card-info" id="cardAnnuity-${id}">
-            <div class="card-header">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownProductButton-${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-product-type="annuity">
-                        ${translations['Amortizing loan']}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownProductButton-${id}">
-                        <a class="dropdown-item annuity-switch" href="#" data-value="${id}">${translations['Amortizing loan']}</a>
-                        <a class="dropdown-item rd-switch" href="#" data-value="${id}">${translations['Savings plan']}</a>
+            <form id="product-form-${id}">
+                <div class="row">    
+                    <div class="card card-info" id="cardAnnuity-${id}">
+                        <div class="card-header">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownProductButton-${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-product-type="annuity">
+                                    ${translations['Amortizing loan']}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownProductButton-${id}">
+                                    <a class="dropdown-item annuity-switch" href="#" data-value="${id}">${translations['Amortizing loan']}</a>
+                                    <!--<a class="dropdown-item rd-switch" href="#" data-value="${id}">${translations['Savings plan']}</a>-->
+                                </div>
+                            </div>
+                                <a data-toggle="collapse" data-target="#collapseAnnuity-${id}" href="#collapseAnnuity-${id}" class="" aria-expanded="true">
+                                    <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="${translations['Show details']}">-</span>
+                                </a>
+                            <div id="permahash-${id}"></div>                 
+                        </div>
+                        <div id="collapseAnnuity-${id}" class="card-collapse collapse show" style="">
+                            <div class="card-body">
+                                ${table}
+                            </div> <!-- end of annuity card body -->
+                            ${opt_params}
+                            ${kpi}
+                        </div> 
                     </div>
                 </div>
-                    <a data-toggle="collapse" data-target="#collapseAnnuity-${id}" href="#collapseAnnuity-${id}" class="" aria-expanded="true">
-                        <span class="toggle-sign" data-toggle="tooltip" data-placement="top" title="" data-original-title="${translations['Show details']}">-</span>
-                    </a>
-                <div id="permahash-${id}"></div>                 
-            </div>
-            <div id="collapseAnnuity-${id}" class="card-collapse collapse show" style="">
-                <div class="card-body">
-                    ${table}
-                </div> <!-- end of annuity card body -->
-                ${opt_params}
-                ${kpi}
-            </div> 
-        </div>
-    </div>
-</form>
+            </form>
         `;
     }
   };
