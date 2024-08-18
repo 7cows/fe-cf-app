@@ -78,7 +78,7 @@ function addCashFlowJSONs(cf1, cf2) {
     };
 }
 
-function renderRaster(_raster, n = 1, curr = '$') {
+function renderRaster(_raster, n = 1, translations = {}, curr = '$') {
     let raster = JSON.parse(JSON.stringify(_raster));
     // cast n to number
     n = Number(n);
@@ -90,11 +90,11 @@ function renderRaster(_raster, n = 1, curr = '$') {
 
     const dollarColumns = ['interest_to_pay', 'amort', 'payments', 'balance'];
     let columnMapping = {
-        "payments": "Payments",
-        "interest_to_pay": "Interest to Pay",
-        "amort": "Amortization",
-        "balance": "Outstanding Balance",
-        "amort_rate": "Amortization Rate"
+        "payments": translations["Payments"],
+        "interest_to_pay": translations["Interest to Pay"],
+        "amort": translations["Amortization"],
+        "balance": translations["Outstanding Balance"],
+        "amort_rate": translations["Amortization Rate"]
     };
 
     // Function to format numbers as currency
@@ -107,13 +107,13 @@ function renderRaster(_raster, n = 1, curr = '$') {
     console.log('renderRaster/tIndex', tIndex);
     if (tIndex !== -1) {
         if (n === 12) { // Monthly
-            raster.columns[tIndex] = 'Year';
-            raster.columns.splice(tIndex + 1, 0, 'Month');
+            raster.columns[tIndex] = translations['Year'];
+            raster.columns.splice(tIndex + 1, 0, translations['Month']);
         } else if (n === 4) { // Quarterly
-            raster.columns[tIndex] = 'Year';
-            raster.columns.splice(tIndex + 1, 0, 'Quarter');
+            raster.columns[tIndex] = translations['Year'];
+            raster.columns.splice(tIndex + 1, 0, translations['Quarter']);
         } else { // Yearly or other
-            raster.columns[tIndex] = 'Year';
+            raster.columns[tIndex] = translations['Year'];
         }
     }
     let timeUnit;

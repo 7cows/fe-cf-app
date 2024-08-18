@@ -5,20 +5,10 @@ let sumDisaggCashFlows = {};
 let hashes = {};
 let productTypes = {};
 let pf_permahash = '';
+let curr = "$";
 let form_settings = '10111100000';
-let card_translations = {
-  'short_desc': "Description",
-  'P0': "Principal",
-  'r': "Interest Rate",
-  'T': "Loan Maturity",
-  'A': "Regular payment",
-  'n': "Frequency",
-  'shift': "Delay payback",
-  'minimumPayment': "Minimal payment",
-  'compounding': "Compounding",
-  'remaining_debt': "Remaining debt",
-  'paydown': "Pay down to zero",
-}
+// TODO: delete this dictionary once working
+let translations = {}
 
 API_ENDPOINT = typeof API_ENDPOINT !== 'undefined' ? API_ENDPOINT : '';
 
@@ -42,7 +32,7 @@ function extractBalanceForProduct(productData, productType) {
   let balanceIndex = productData.columns.indexOf("balance");
 
 if (balanceIndex === -1) {  // If "balance" is not found...
-    balanceIndex = productData.columns.indexOf("Outstanding Balance");  // ...try "Outstanding Balance"
+    balanceIndex = productData.columns.indexOf(translations["Outstanding Balance"]);  // ...try "Outstanding Balance"
 }
   if (balanceIndex === -1) {
       throw new Error("Balance column not found");
@@ -420,7 +410,7 @@ callApi = function(productId, productType, isExample = false) {
             console.log(json_raster);
             console.log('callApi/ajax - Sum of cash flows:');
             console.log(sumCashFlows);
-            let rasterTable = htmlizeTable(renderRaster(sumCashFlows), 'table table-hover');
+            let rasterTable = htmlizeTable(renderRaster(sumCashFlows, 1, translations), 'table table-hover');
             $('#raster-placeholder').html(rasterTable);
             console.log('callApi/ajax-response.error_msg (status 200):', response.error_msg);
             document.querySelector('.error_output').textContent = ''//response.error_msg;
@@ -609,18 +599,18 @@ function handleRecurringDepositClick(e) {
 
 function createCFDropdown() {
   if (Object.keys(cashFlows).length > 0) {
-    let dropdownDownloadCSV = `<button onclick="downloadCSV()" id="csvDownloadButton" class="btn btn-light">Download as CSV</button>`; // Added Bootstrap class for styling
+    let dropdownDownloadCSV = `<button onclick="downloadCSV()" id="csvDownloadButton" class="btn btn-light">${translations['Download as CSV']}</button>`; // Added Bootstrap class for styling
     $('#csvDropdown-placeholder').html(dropdownDownloadCSV); // Corrected the jQuery selector
     
     // Now add the disaggregated view
     let aggDisaggDropdownHtml = `
     <div class="dropdown d-inline">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="aggDisaggDropdownButton" data-toggle="dropdown" aria-expanded="false">
-            Aggregated
+            ${translations['Aggregated']}
         </button>
         <ul class="dropdown-menu" aria-labelledby="aggDisaggDropdownButton" id="aggDisaggDropdown">
-            <li><a class="dropdown-item" href="#" data-key="aggregated">Aggregated</a></li>
-            <li><a class="dropdown-item" href="#" data-key="disaggregated">Disaggregated</a></li>
+            <li><a class="dropdown-item" href="#" data-key="aggregated">${translations['Aggregated']}</a></li>
+            <li><a class="dropdown-item" href="#" data-key="disaggregated">${translations['Disaggregated']}</a></li>
         </ul>
     </div>`;
 
@@ -640,11 +630,11 @@ function createCFDropdown() {
           <ul class="dropdown-menu" aria-labelledby="cfDropdownButton" id="cfDropdown">`;
 
       // Add "Sum of cash flows" as the default option
-      dropdownHtml += `<li><a class="dropdown-item" href="#" data-key="sum">Sum of Cash Flows</a></li>`;
+      dropdownHtml += `<li><a class="dropdown-item" href="#" data-key="sum">${translations["Sum of Cash Flows"]}</a></li>`;
 
       // Add new items based on sumCashFlows keys
       Object.keys(cashFlows).forEach(function(key, index) {
-          dropdownHtml += `<li><a class="dropdown-item" href="#" data-key="${key}">Cash Flow ${index + 1}</a></li>`;
+          dropdownHtml += `<li><a class="dropdown-item" href="#" data-key="${key}">${translations["Cash Flow"]} ${index + 1}</a></li>`;
       });
 
       dropdownHtml += `</ul></div>`;
@@ -676,7 +666,7 @@ function handleDropdownItemClick(e) {
     dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
   }
   n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n), 'table table-hover');
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations), 'table table-hover');
   $('#cfDropdownButton').data('key', key); // Store the selected key in the button's data
   $('#raster-placeholder').html(renderedRaster);
 }
@@ -699,7 +689,7 @@ function handleAggDisaggDropdownItemClick(e) {
     dataToRender = aggDisaggKey === 'aggregated' ? cashFlows[cfKey] : disaggCashFlows[cfKey];
   }
   n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n), 'table table-hover');
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations), 'table table-hover');
   $('#raster-placeholder').html(renderedRaster);
 
 

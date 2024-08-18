@@ -3,7 +3,7 @@ $(document).ready(function() {
     console.log("ready.js/sumCashFlows", sumCashFlows);
     if (Object.keys(sumCashFlows).length  > 0)
     {
-        let rendered_raster =  htmlizeTable(renderRaster(sumCashFlows), 'table table-hover');
+        let rendered_raster =  htmlizeTable(renderRaster(sumCashFlows, translations = translations), 'table table-hover');
         $('#raster-placeholder').html(rendered_raster);    
     }
     createCFDropdown(); // Create the dropdown if needed
@@ -62,7 +62,7 @@ $(document).ready(function() {
             // Optionally, switch to the new card in the pagination
             $('#pagination .page-item').last().find('a').click();
         } else {
-            alert("Maximum number of products (" + MAX_NUM_PRODUCTS + ") reached.");
+            alert(translations["Maximum number of products"] + " (" + MAX_NUM_PRODUCTS + ") " + translations["reached"]);
             console.warn("Maximum number of products (" + MAX_NUM_PRODUCTS + ")  reached.");
         }
     });
@@ -75,10 +75,10 @@ $(document).ready(function() {
         let elementId = 'dropdownProductButton-' + productId;
         let element = document.getElementById(elementId);
         if (productType === 'annuity') {
-            element.textContent = 'Annuity';
+            element.textContent = translations['Amortizing loan'];
             element.setAttribute('data-product-type', 'annuity');
         } else if (productType === 'deposit') {
-            element.textContent = 'Recurring Deposit';
+            element.textContent = translations['Savings plan'];
             element.setAttribute('data-product-type', 'deposit');
         }
     }
