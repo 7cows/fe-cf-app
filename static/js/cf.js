@@ -264,7 +264,7 @@ function generatePFkpiTable(data) {
     let dataForTable = {
         'EAPR:': `${(eapr * 100).toFixed(2)}%`,
         'Period:': `${maxT.toFixed(2)} years`,
-        'Payback per $1:': `\$${paybackPerBuck.toFixed(2)}`,
+        'Payback per $1': `\$${paybackPerBuck.toFixed(2)}`,
         'Interest to pay:': `\$${interestToPay.toFixed(2)}`
     };
 

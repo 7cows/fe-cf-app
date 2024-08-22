@@ -4,7 +4,7 @@
 {% if not debug %}
 <!-- Google tag (gtag.js) -->
 {% endif %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -24,7 +24,7 @@
     cashFlows = {};
 
     let parameterized_form_settings = '{{ form_settings | safe }}';
-    
+
     if (parameterized_form_settings){
       form_settings = parameterized_form_settings;
     }
@@ -119,6 +119,7 @@
   });
 </script>
 <script src="{{ url_for('static', filename='js/ready.js') }}"></script>
+
 {% endblock %}
 {% block content %}
     <div class="container" style="margin-top: 20px;">
@@ -131,7 +132,25 @@
           <!-- left column -->
         </div>
         <div class="col-sm-6">
-            <a href="/CF"><i class="bi bi-house"></i></a>
+            <div id="ui_header">
+              <a href="/CF" class="d-inline-block">
+                <i class="bi bi-house"></i>
+              </a>
+              <div id="currDDG" class="btn-group">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bi bi-currency-dollar"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="#" onclick="setCurrency('USD')"><i class="bi bi-currency-dollar"></i> USD</a>
+                  <a class="dropdown-item" href="#" onclick="setCurrency('EUR')"><i class="bi bi-currency-euro"></i> EUR</a>
+                  <a class="dropdown-item" href="#" onclick="setCurrency('GBP')"><i class="bi bi-currency-pound"></i> GBP</a>
+                  <a class="dropdown-item" href="#" onclick="setCurrency('JPY')"><i class="bi bi-currency-yen"></i> JPY</a>
+                  <a class="dropdown-item" href="#" onclick="setCurrency('NULL')"><i class="bi bi-reception-0"></i> NULL</a>
+                </div>
+              </div>
+              <!--<i class="bi bi-translate"></i>-->
+                
+            </div>
             <h1></h1>
             <!-- Pagination Controls -->
             <div id="pf_permahash" class="container mb-2"></div>
@@ -169,4 +188,5 @@
         </div>
       </div>
     </div>
+    <script>setCurrency(curr);</script>
 {% endblock %}

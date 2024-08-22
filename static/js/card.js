@@ -29,7 +29,7 @@ function getFormElements(id, translations){
                 </strong>
             </td>
             <td class="col-md-6">
-                <div class="input-sign-wrapper" data-sign="$">
+                <div class="input-sign-wrapper" data-sign="${curr}">
                     <input type="text" id="P0Display-${id}" class="form-control currency-input" value="" placeholder="e.g. 500'000"
                     data-toggle="tooltip" title="${translations['The total amount of money borrowed or the remaining loan balance you need to repay']}" data-placement='left'>
                 </div>
@@ -94,7 +94,7 @@ function getFormElements(id, translations){
                 </strong>
             </td>
             <td class="col-md-6">
-            <div class="input-sign-wrapper" data-sign="$">
+            <div class="input-sign-wrapper" data-sign="${curr}">
                     <input type="text" id="ADisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
                     data-toggle="tooltip" title="${translations['The amount of money paid back to the lender at regular intervals']}" data-placement='left'>
                 </div>
@@ -156,7 +156,7 @@ function getFormElements(id, translations){
                 </strong>
             </td>
             <td class="col-md-6">
-                <div class="input-sign-wrapper" data-sign="$">
+                <div class="input-sign-wrapper" data-sign="${curr}">
                     <input type="text" id="minPaymentDisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
                     data-toggle="tooltip" title="The minimum amount of money you need to pay back to the lender at regular intervals" data-placement='left'>
                 </div>
@@ -185,7 +185,7 @@ function getFormElements(id, translations){
                 </strong>
             </td>
             <td class="col-md-6">
-            <div class="input-sign-wrapper" data-sign="$">
+            <div class="input-sign-wrapper" data-sign="${curr}">
                     <input type="text" id="remainingDebtDisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
                     data-toggle="tooltip" title="The remaining debt after the loan maturity" data-placement='left'>
             </div>

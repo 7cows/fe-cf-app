@@ -5,8 +5,10 @@ let sumDisaggCashFlows = {};
 let hashes = {};
 let productTypes = {};
 let pf_permahash = '';
-let curr = "$";
+let curr = getCurrencyFromURL();
+//let curr = "$";
 let form_settings = '10111100000';
+let ui_settings = '000';
 // TODO: delete this dictionary once working
 let translations = {}
 
@@ -410,7 +412,7 @@ callApi = function(productId, productType, isExample = false) {
             console.log(json_raster);
             console.log('callApi/ajax - Sum of cash flows:');
             console.log(sumCashFlows);
-            let rasterTable = htmlizeTable(renderRaster(sumCashFlows, 1, translations), 'table table-hover');
+            let rasterTable = htmlizeTable(renderRaster(sumCashFlows, 1, translations, curr), 'table table-hover');
             $('#raster-placeholder').html(rasterTable);
             console.log('callApi/ajax-response.error_msg (status 200):', response.error_msg);
             document.querySelector('.error_output').textContent = ''//response.error_msg;
@@ -666,7 +668,7 @@ function handleDropdownItemClick(e) {
     dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
   }
   n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations), 'table table-hover');
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr), 'table table-hover');
   $('#cfDropdownButton').data('key', key); // Store the selected key in the button's data
   $('#raster-placeholder').html(renderedRaster);
 }
@@ -689,7 +691,7 @@ function handleAggDisaggDropdownItemClick(e) {
     dataToRender = aggDisaggKey === 'aggregated' ? cashFlows[cfKey] : disaggCashFlows[cfKey];
   }
   n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations), 'table table-hover');
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr), 'table table-hover');
   $('#raster-placeholder').html(renderedRaster);
 
 
