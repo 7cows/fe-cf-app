@@ -115,7 +115,7 @@ function getFormElements(id, translations){
             <td class="col-md-6" colspan="3">
                 <input type="range" id="nSlider-${id}" name="annFreqVisual" min="1" max="3" value="3" class="custom-range" onchange="updateFrequencyLabel(this.value, ${id})"
                 data-toggle="tooltip" title="${translations['How often payments are made, e.g., monthly or quarterly, affecting the total interest paid and the speed of loan repayment.']}" data-placement='left'>
-                <span id="frequencyLabel-${id}">Monthly</span>
+                <span id="frequencyLabel-${id}">${translations['Monthly']}</span>
                 <input type="hidden" id="n-${id}" name="n" value="12">
             </td>
         </tr>
@@ -311,18 +311,15 @@ const htmlElements = {
     }
   };
 
-let specificId = 0; // to keep track of IDs to ensure uniqueness.
-
-function generateCardId(settings='111110000') {
-    console.log('Generating new card with ID: ', specificId);
-    specificId++; // Increment the ID each time to ensure uniqueness
-    let kpi = htmlElements['KPI'](specificId);
-    let table = htmlElements['annuity_table'](specificId, settings);
+function generateCardId(settings='111110000', productId) {
+    console.log('Generating new card with ID: ', productId);
+    let kpi = htmlElements['KPI'](productId);
+    let table = htmlElements['annuity_table'](productId, settings);
     var opt_params = '';
     if (settings.includes('2')){
-        opt_params = htmlElements['opt_params'](specificId, settings);
+        opt_params = htmlElements['opt_params'](productId, settings);
     } 
-    let card = htmlElements['card'](specificId, table, kpi, opt_params);
+    let card = htmlElements['card'](productId, table, kpi, opt_params);
     
     return card;
 }

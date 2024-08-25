@@ -5,6 +5,7 @@ let sumDisaggCashFlows = {};
 let hashes = {};
 let productTypes = {};
 let pf_permahash = '';
+let specificId = 1; // to keep track of IDs to ensure uniqueness.
 let curr = getCurrencyFromURL();
 //let curr = "$";
 let form_settings = '10111100000';
@@ -221,6 +222,9 @@ function setSliderValue(productId, years, months, prefix = "T_") {
 }
 
 populateForm = function(productId, params) {
+  if (Object.keys(params).length === 0) {
+    return;
+  }
   const APR_rounding_digits = 4;
   console.log('populateForm/params:', params);
   console.log('Populating form for product: ' + productId);
@@ -276,6 +280,64 @@ populateForm = function(productId, params) {
   // add product QR code
   displayLinkAndQRCode(productId, hashUrl);
 };
+
+// reverse of populateForm
+function extractParams(productId) {
+  const APR_rounding_digits = 4; // Assuming you need to round the APR when extracting it
+  let params = {};
+
+  // Helper function to assign values only if they're valid
+  function assignIfValid(key, value) {
+      if (value !== undefined && !isNaN(value) && value !== null) {
+          params[key] = value;
+      }
+  }
+
+  // Extract values from money fields
+  const fields = ['P0', 'A', 'remainingDebt', 'minPayment'];
+  fields.forEach(field => {
+      let value = $('#' + field + '-' + productId).val();
+      assignIfValid(field, value);
+  });
+
+  // Text and Hidden Inputs
+  let rate = parseFloat($('#r-' + productId).val()) / 100; // Convert back from percentage
+  assignIfValid('r', rate);
+
+  let n = parseInt($('#n-' + productId).val(), 10);
+  assignIfValid('n', n);
+
+  let T_years = parseInt($('#T_years-' + productId).val(), 10);
+  assignIfValid('T_years', T_years);
+
+  let T_months = parseInt($('#T_months-' + productId).val(), 10);
+  assignIfValid('T_months', T_months);
+
+  // Determine frequency based on nSlider position
+  const nSliderValue = $('#nSlider-' + productId).val();
+  let frequency = nSliderValue == 1 ? 1 : (nSliderValue == 2 ? 4 : 12);
+  assignIfValid('n', frequency);
+
+  // Check product type using specific classes or data attributes
+  if ($('.annuity-switch[data-value="' + productId + '"]').is(':checked')) {
+      params.product = 'annuity';
+  } else if ($('.rd-switch[data-value="' + productId + '"]').is(':checked')) {
+      params.product = 'deposit';
+  }
+
+  // Deduce free_param based on the radio button checked status
+  if (true) {
+    params.freeParam = $('#rbP0-' + productId).is(':checked') ? 'P0' :
+    $('#rbT-' + productId).is(':checked') ? 'maturity' :
+    $('#rbA-' + productId).is(':checked') ? 'A' :
+    $('#rbr-' + productId).is(':checked') ? 'r' : undefined;
+    assignIfValid('free_param', freeParam);
+  } else {
+    params.freeParam = 'r';
+  }
+
+  return params;
+}
 
 function processData(productId) {
   let sliderValue = $('#nSlider-' + productId).val();
@@ -798,25 +860,43 @@ function updatePaginationVisibility() {
 
 function createCardAndPaginationItem(card, id) {
   let pageId = 'page-' + id;
-  let cardContainer = $('<div></div>').attr('id', pageId).addClass('card-container').append(card);
-  $('#product-container').append(cardContainer);
+  let existingCardContainer = $('#' + pageId);
+  
+  // If the card with the same ID exists, replace its content
+  if (existingCardContainer.length) {
+      existingCardContainer.empty().append(card);
+  } else {
+      // If the card doesn't exist, create a new one and append it
+      let cardContainer = $('<div></div>').attr('id', pageId).addClass('card-container').append(card);
+      $('#product-container').append(cardContainer);
 
-  let paginationItem = $('<li class="page-item"><a class="page-link" href="#">' + id + '</a></li>');
-  $('#pagination').append(paginationItem);
+      let paginationItem = $('<li class="page-item"><a class="page-link" href="#">' + id + '</a></li>');
+      $('#pagination').append(paginationItem);
 
-  paginationItem.on('click', 'a', function(e) {
-      e.preventDefault();
-      $('.card-container').hide();
-      $('#' + pageId).show();
+      paginationItem.on('click', 'a', function(e) {
+          e.preventDefault();
+          $('.card-container').hide();
+          $('#' + pageId).show();
 
-      $('#pagination .page-item').removeClass('active');
-      $(this).parent().addClass('active');
-  });
+          $('#pagination .page-item').removeClass('active');
+          $(this).parent().addClass('active');
+      });
 
-  if (id === 1) {
-      paginationItem.find('a').click(); // Activate the first card and pagination item
+      if (id === 1) {
+          paginationItem.find('a').click(); // Activate the first card and pagination item
+      }
   }
+
   updatePaginationVisibility();
+}
+
+function generateProductCard(setting, params) {
+  specificId++;
+  let newCard = generateCardId(setting, specificId);
+  createCardAndPaginationItem(newCard, specificId);
+  hookFormEventsForProduct(specificId);
+  setMaturityBasedOnPrevious(specificId);
+  populateForm(specificId, params);
 }
 
 function get_max_n() {
