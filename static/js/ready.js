@@ -42,7 +42,7 @@ $(document).ready(function() {
     // Assuming that productId is related to a form. 
     // This will get productId from the first form on the page.
     let productId = $('form').find('[id^="search-btn-"]').data('product-id');
-    
+
     hookFormEventsForProduct(productId);
     //attachEventHandlers(productId); 
 
@@ -50,15 +50,7 @@ $(document).ready(function() {
         console.log('New credit button clicked');
         let MAX_NUM_PRODUCTS = 10;
         if (specificId < MAX_NUM_PRODUCTS) {
-            let newCard = generateCardId(form_settings); // Ensure form_settings is correctly defined
-        
-            // Create the new card and its pagination item using the updated specificId
-            createCardAndPaginationItem(newCard, specificId);
-            setMaturityBasedOnPrevious(specificId);
-            // Additional setup for the new card, if needed
-            hookFormEventsForProduct(specificId);
-            // Other necessary functions can be called here
-        
+            generateProductCard(form_settings, {});
             // Optionally, switch to the new card in the pagination
             $('#pagination .page-item').last().find('a').click();
         } else {

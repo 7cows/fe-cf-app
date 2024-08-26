@@ -36,6 +36,7 @@ def get_translations():
             "Sum of Cash Flows",
             "Cash Flow",
             "Year", "Month", "Quarter", "Payments", "Interest to Pay", "Amortization", "Outstanding Balance",
+            "Monthly", "Quarterly", "Semi-annually", "Annually",
             ]
     translations |= {el: tr(el) for el in lst}
     return translations

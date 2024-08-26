@@ -290,6 +290,8 @@ function extractParams(productId) {
   function assignIfValid(key, value) {
       if (value !== undefined && !isNaN(value) && value !== null) {
           params[key] = value;
+      } else {
+          params[key] = '';
       }
   }
 
@@ -330,12 +332,12 @@ function extractParams(productId) {
     params.freeParam = $('#rbP0-' + productId).is(':checked') ? 'P0' :
     $('#rbT-' + productId).is(':checked') ? 'maturity' :
     $('#rbA-' + productId).is(':checked') ? 'A' :
-    $('#rbr-' + productId).is(':checked') ? 'r' : undefined;
-    assignIfValid('free_param', freeParam);
+    $('#rbr-' + productId).is(':checked') ? 'r' : 'r';
+    assignIfValid('free_param', params.freeParam);
   } else {
     params.freeParam = 'r';
   }
-
+  params.permahash = hashes[productId];
   return params;
 }
 
@@ -891,12 +893,18 @@ function createCardAndPaginationItem(card, id) {
 }
 
 function generateProductCard(setting, params) {
-  specificId++;
+
   let newCard = generateCardId(setting, specificId);
   createCardAndPaginationItem(newCard, specificId);
   hookFormEventsForProduct(specificId);
-  setMaturityBasedOnPrevious(specificId);
+  if (specificId > 1 && Object.keys(params).length > 1) {
+    setMaturityBasedOnPrevious(specificId);
+  }
   populateForm(specificId, params);
+  hashes[specificId] = params['permahash'] ? params['permahash'] : '';
+  productTypes[specificId] = params['product'] ? params['product'] : '';
+
+  specificId++;
 }
 
 function get_max_n() {

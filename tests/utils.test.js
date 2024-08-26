@@ -1,4 +1,4 @@
-const { replaceMiddle, roundToNDigits, extractSortedValuesByKeys, filterAndLimitString, parseStringArray} = require('../static/js/utils'); // replace with the actual file name
+const { replaceMiddle, roundToNDigits, extractSortedValuesByKeys, filterAndLimitString, parseStringArray, fetchTranslations} = require('../static/js/utils'); // replace with the actual file name
 
 test('replaces middle of long strings correctly', () => {
   expect(replaceMiddle('abcdefghijk')).toBe('abcd...hijk');
@@ -33,4 +33,4 @@ test('parses string arrays correctly', () => {
     expect(parseStringArray('abc,def,ghi')).toEqual(['abc', 'def', 'ghi']);
     expect(parseStringArray('abc,def,ghi,')).toEqual(['abc', 'def', 'ghi', '']);
     expect(parseStringArray('abc,def,ghi,')).not.toEqual(['abc', 'def', 'ghi']);
-})
+});

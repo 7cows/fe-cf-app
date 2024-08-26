@@ -30,10 +30,6 @@ function filterAndLimitString(input, n) {
 function parseStringArray(input) {
     return input.split(',').map(s => s.trim());
 }
-  
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { replaceMiddle, roundToNDigits, extractSortedValuesByKeys, filterAndLimitString, parseStringArray };
-}
 
 function setCurrency(currency) {
     // Update the global currency variable
@@ -46,10 +42,52 @@ function setCurrency(currency) {
     var url = new URL(window.location.href);
     url.searchParams.set('c', currency);
     window.history.pushState({}, '', url);
-  }
+}
+
+function fetchTranslations(language) {
+    return $.ajax({
+        url: API_ENDPOINT + '/api/translations/' + language,
+        method: 'GET',
+        dataType: 'json'
+    }).then(function(data) {
+        // Return the translations dictionary
+        return data;
+    }).catch(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error fetching translations:', textStatus, errorThrown);
+        return {}; // Return an empty object in case of an error
+    });
+}
+
+async function setLanguage(language) {
+    // Update the dropdown to show the selected language
+    $('#langDDG .dropdown-toggle').html(language);
+    
+    // Update the URL with the new language parameter
+    var url = new URL(window.location.href);
+    url.searchParams.set('l', language);
+    window.history.pushState({}, '', url);
+
+    // Fetch the updated translations asynchronously
+    var updated_translations = await fetchTranslations(language);
+
+    // Update the global translations variable if new translations are fetched
+    if (Object.keys(updated_translations).length > 0) {
+        translations = updated_translations;
+    }
+
+    let oldSpecificId = specificId-1;
+    // Optionally reset specificId and repopulate forms
+    specificId = 1;
+    for (let productId = 1; productId <= oldSpecificId; productId++) {
+        alert(productId);
+        let params = extractParams(productId);
+        generateProductCard(form_settings, params);
+    }
+}
+
   
-  // Function to return the HTML for the selected currency icon
-  function getCurrencyHtml(currency) {
+// Function to return the HTML for the selected currency icon
+function getCurrencyHtml(currency) {
     let currencyIcons = {
       'USD': '<i class="bi bi-currency-dollar"></i>',
       'EUR': '<i class="bi bi-currency-euro"></i>',
@@ -58,10 +96,10 @@ function setCurrency(currency) {
       'NULL': '<i class="bi bi-reception-0"></i>'  // Use the "NULL" option with the corresponding icon
     };
     return currencyIcons[currency];
-  }
+}
   
-  // Function to return the symbol for the selected currency
-  function getCurrencySymbol(currency) {
+// Function to return the symbol for the selected currency
+function getCurrencySymbol(currency) {
     let currencySymbols = {
       'USD': '$',
       'EUR': '€',
@@ -71,11 +109,15 @@ function setCurrency(currency) {
       'NULL': ''  // If NULL, set to an empty string or any default you prefer
     };
     return currencySymbols[currency];
-  }
+}
 
-  function getCurrencyFromURL() {
+function getCurrencyFromURL() {
     // Get the 'c' parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const currency = urlParams.get('c') || 'USD'; // Default to 'USD' if 'c' is not present
     return currency;
- }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { replaceMiddle, roundToNDigits, extractSortedValuesByKeys, filterAndLimitString, parseStringArray, fetchTranslations };
+}
