@@ -31,19 +31,6 @@ function parseStringArray(input) {
     return input.split(',').map(s => s.trim());
 }
 
-function setCurrency(currency) {
-    // Update the global currency variable
-    curr = getCurrencySymbol(currency);
-  
-    // Update the dropdown button to show the selected currency icon
-    $('#currDDG .dropdown-toggle').html(getCurrencyHtml(currency));
-  
-    // Update the 'c' parameter in the URL
-    var url = new URL(window.location.href);
-    url.searchParams.set('c', currency);
-    window.history.pushState({}, '', url);
-}
-
 function fetchTranslations(language) {
     return $.ajax({
         url: API_ENDPOINT + '/api/translations/' + language,
@@ -74,12 +61,14 @@ async function setLanguage(language) {
     if (Object.keys(updated_translations).length > 0) {
         translations = updated_translations;
     }
+    reGenerateUI();
+}
 
+function reGenerateUI() {
     let oldSpecificId = specificId-1;
     // Optionally reset specificId and repopulate forms
     specificId = 1;
     for (let productId = 1; productId <= oldSpecificId; productId++) {
-        alert(productId);
         let params = extractParams(productId);
         generateProductCard(form_settings, params);
     }
@@ -116,6 +105,20 @@ function getCurrencyFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     const currency = urlParams.get('c') || 'USD'; // Default to 'USD' if 'c' is not present
     return currency;
+}
+
+function setCurrency(currency) {
+    // Update the global currency variable
+    curr = getCurrencySymbol(currency);
+  
+    // Update the dropdown button to show the selected currency icon
+    $('#currDDG .dropdown-toggle').html(getCurrencyHtml(currency));
+  
+    // Update the 'c' parameter in the URL
+    var url = new URL(window.location.href);
+    if (curr !== 'USD') url.searchParams.set('c', currency);
+    window.history.pushState({}, '', url);
+    reGenerateUI();
 }
 
 if (typeof module !== 'undefined' && module.exports) {
