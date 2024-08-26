@@ -51,14 +51,15 @@
     }
     //let desc_input;
     
-
+    let card_settings;
     {% for param in params %}
-      let card_settings;
+      
       {% if param.form_settings %}
-        card_settings = "{{ param['form_settings'] }}";
+      card_settings = "{{ param['form_settings'] }}";
       {% else %}
         card_settings = form_settings;
       {% endif %}
+
       generateProductCard(card_settings, {{ param|tojson|safe }});
       //hashes[specificId] = "{{ param['permahash'] }}";
       //productTypes[specificId] = "{{ param['product'] }}";
@@ -74,6 +75,7 @@
     
 
       {% if json_rasters is defined %}
+        specificId--;
         //console.log("results.html/cashFlows (before JSON.parse): ", cashFlows);
         cashFlows[specificId] = JSON.parse({{ json_rasters[loop.index0]|tojson|safe }});
         disaggCashFlows[specificId] = JSON.parse({{ json_disagg_rasters[loop.index0]|tojson|safe }});
@@ -81,6 +83,7 @@
         //console.log("results.html/sumCashFlows cashFlows[specificId]: ", specificId, cashFlows[specificId]);
         sumCashFlows = addCashFlowJSONs(sumCashFlows, cashFlows[specificId]);
         sumDisaggCashFlows = addCashFlowJSONs(sumDisaggCashFlows, disaggCashFlows[specificId]);
+        specificId++;
         //console.log("results.html/sumCashFlows (after addition): ", specificId, sumCashFlows);
       {% endif %}
 

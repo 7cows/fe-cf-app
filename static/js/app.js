@@ -870,6 +870,7 @@ function createCardAndPaginationItem(card, id) {
   } else {
       // If the card doesn't exist, create a new one and append it
       let cardContainer = $('<div></div>').attr('id', pageId).addClass('card-container').append(card);
+      cardContainer.hide();
       $('#product-container').append(cardContainer);
 
       let paginationItem = $('<li class="page-item"><a class="page-link" href="#">' + id + '</a></li>');

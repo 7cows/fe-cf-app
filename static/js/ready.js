@@ -3,7 +3,7 @@ $(document).ready(function() {
     console.log("ready.js/sumCashFlows", sumCashFlows);
     if (Object.keys(sumCashFlows).length  > 0)
     {
-        let rendered_raster =  htmlizeTable(renderRaster(sumCashFlows, translations = translations), 'table table-hover');
+        let rendered_raster =  htmlizeTable(renderRaster(sumCashFlows, 1, translations, curr), 'table table-hover');
         $('#raster-placeholder').html(rendered_raster);    
     }
     createCFDropdown(); // Create the dropdown if needed
