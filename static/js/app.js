@@ -93,15 +93,17 @@ chooseAnnFreeParameter = function(radio, productId) {
     'T_YearsDropdown',
     'T_MonthsDropdown',
     'T_Slider',
-    'remainingDebt'
+    'remainingDebtDisplay'
   ];
 
   // Loop through each prefix and update the prop
   $.each(idPrefixes, function(index, prefix) {
-    $('#' + prefix + '-' + productId).prop('disabled', false);
+    let identifier = '#' + prefix + '-' + productId;
+    $(identifier).prop('disabled', false);
   });
   // If the id needs to be associated with a specific product, 
   // you can parse the productId from the radio button's id as well.
+
   switch(id) {
     case "rbP0-" + productId:
       $('#P0Display-' + productId).prop('disabled', true);
@@ -113,7 +115,7 @@ chooseAnnFreeParameter = function(radio, productId) {
       $('#ADisplay-' + productId).prop('disabled', true);
       break;
     case "rbremainingDebt-" + productId: 
-      $('#remainingDebt-' + productId).prop('disabled', true);
+      $('#remainingDebtDisplay-' + productId).prop('disabled', true);
       break;
     case "rbT-" + productId:
       $('#T_YearsDropdown-' + productId).prop('disabled', true);
@@ -332,7 +334,8 @@ function extractParams(productId) {
     params.freeParam = $('#rbP0-' + productId).is(':checked') ? 'P0' :
     $('#rbT-' + productId).is(':checked') ? 'maturity' :
     $('#rbA-' + productId).is(':checked') ? 'A' :
-    $('#rbr-' + productId).is(':checked') ? 'r' : 'r';
+    $('#rbr-' + productId).is(':checked') ? 'r' :
+    $('#rbremainingDebt-' + productId).is(':checked') ? 'remainingDebt' : 'r';
     assignIfValid('free_param', params.freeParam);
   } else {
     params.freeParam = 'r';

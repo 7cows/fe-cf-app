@@ -160,7 +160,7 @@ function getFormElements(id, translations){
                     <input type="text" id="minPaymentDisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
                     data-toggle="tooltip" title="The minimum amount of money you need to pay back to the lender at regular intervals" data-placement='left'>
                 </div>
-                <input type="hidden" id="minPayment-${id}" name="minPayment" value="0">
+                <input type="hidden" id="minPayment-${id}" name="AnnuityFreeParameter" value="0">
             </td>
             <td class="col-md-2">
             </td>
@@ -192,7 +192,7 @@ function getFormElements(id, translations){
             <input type="hidden" id="remainingDebt-${id}" name="rDebt" value="0">
             </td>
             <td class="col-md-2">
-                <input type="radio" id="rbremainingDebt-${id}" name="RemainingDebtFreeParameter" value="1" onclick="chooseAnnFreeParameter(this, ${id});"
+                <input type="radio" id="rbremainingDebt-${id}" name="AnnuityFreeParameter" value="5" onclick="chooseAnnFreeParameter(this, ${id});">
             </td>
         </tr>
         `,
