@@ -453,7 +453,7 @@ callApi = function(productId, productType, isExample = false) {
         console.log('Success:', response); // logging the entire response object to inspect its structure
         if (response.error_msg !== ''){
           console.log('callApi/ajax-response.error_msg:', response.error_msg);
-          document.querySelector('.error_output').textContent = response.error_msg;
+          document.querySelector('.error_output').innerHTML = response.error_msg;
         }
         if (response.error_msg == '' || response.error_msg.includes('KPI')){
           if (response.json_raster ) {
