@@ -186,7 +186,7 @@ function getFormElements(id, translations){
             </td>
             <td class="col-md-6">
             <div class="input-sign-wrapper" data-sign="${curr}">
-                    <input type="text" id="remainingDebtDisplay-${id}" class="form-control currency-input" value="" placeholder="e.g. 2'000"
+                    <input type="text" id="remainingDebtDisplay-${id}" class="form-control currency-input" value="0" placeholder="e.g. 2'000"
                     data-toggle="tooltip" title="The remaining debt after the loan maturity" data-placement='left'>
             </div>
             <input type="hidden" id="remainingDebt-${id}" name="rDebt" value="0">
