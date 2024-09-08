@@ -197,11 +197,13 @@ function findMaxT(dataObject) {
     return lastRow[0]; // 't' is the first element in each row
 }
 
-function translateData(dataObject) {
+function translateData(dataObject, column = "payments") {
+    const columnIndex = dataObject.columns.indexOf(column);
+
     return dataObject.data.map(row => {
         return {
             t: row[dataObject.columns.indexOf("t")],
-            payments: row[dataObject.columns.indexOf("payments")]
+            [column]: row[columnIndex] // Dynamically set the key to the column name
         };
     });
 }
@@ -252,11 +254,32 @@ function find_root(f,x0)
 	return x;
 }
 
+function addOutstandingBalance(cashFlowArray, outstandingBalance) {
+    // Find the last element in the array
+    let lastIndex = cashFlowArray.length - 1;
+
+    // Add the outstanding balance to the last payment
+    cashFlowArray[lastIndex].payments += outstandingBalance;
+
+    return cashFlowArray;
+}
+
 function generatePFkpiTable(data) {
     let translatedData = translateData(data);
+    let translatedBalanceData = translateData(data, 'balance');
+    let lastIndex = translatedBalanceData.length - 1;
+
+    // Extract the last balance value from the array
+    let outstandingBalance = translatedBalanceData[lastIndex].balance;
+    // Add the outstanding balance to the last payment
+    translatedData[lastIndex].payments += outstandingBalance;
+
+    //let ob = outstandingBalanceAsCF(data);
+    //let translatedData = translateData(addCashFlowJSONs(data, ob));
     console.log('generatePFkpiTable/translatedData', translatedData);
       // Assuming the functions and data are already defined and calculated
     let eapr = EAPR(translatedData);
+    //let eapr = EAPR(addCashFlowJSONs(translatedData, ob));
     let maxT = findMaxT(data);
     let paybackPerBuck = paybackPerBuckLambda(data);
     let interestToPay = applyToData(data, sumLambda);
@@ -284,5 +307,5 @@ function generatePFkpiTable(data) {
   }
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { fprime, find_root, EAPR, addCashFlowJSONs, translateData, NPV };
+    module.exports = { fprime, find_root, EAPR, addCashFlowJSONs, translateData, NPV, outstandingBalanceAsCF };
 }

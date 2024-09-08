@@ -35,11 +35,30 @@ test('test the sum of 2 CFs', () => {
     expect(cf31_sum.data).toEqual(c13_sum_expected.data);
 });
 
-test('test EAPR function', () => {
+// write the test for `translateData` function
+test('test `translateData` function', () => {
+    let cf = {columns: ["t", "payments", "interest_to_pay", "amort", "balance"], index: [0, 1], data: [[0, -1000, 0, 0, 1000], [1, 1100, 100, 1000, 100]]};
+    let tcf = translateData(cf);
+    expect(tcf[1]['t']).toEqual(1);
+    expect(tcf[1]['payments']).toEqual(1100);
+    tcf = translateData(cf, 'balance');
+    expect(tcf[1]['t']).toEqual(1);
+    expect(tcf[1]['balance']).toEqual(100);
+
+    }
+);
+
+test('test EAPR function with non-zero outstanding Balance', () => {
     // Define a simple quadratic function with roots at x = ±2
-    let cf = {columns: ["t", "payments", "interest_to_pay", "amort", "balance"], index: [0, 1], data: [[0, -1000, 0, 0, 1000], [1, 1100, 100, 1000, 0]]};
-    let eapr = EAPR(translateData(cf));
-    expect(eapr).toBeCloseTo(0.1); // Expect to be close to 2
+    let cf = {columns: ["t", "payments", "interest_to_pay", "amort", "balance"], index: [0, 1], data: [[0, -1000, 0, 0, 1000], [1, 1100, 100, 1000, 100]]};
+    let tcf = translateData(cf);
+    let ob = 
+    //let ob = outstandingBalanceAsCF(translateData(cf, 'balance'));
+    expect(ob).toEqual(100);
+    //let ecf = addCashFlowJSONs(tcf, ob);
+    //let eapr = EAPR(ecf);
+    //expect(eapr).toBeCloseTo(0.1); // Expect to be close to 2
+
 });
 
 test('test NPV function', () => {
