@@ -48,19 +48,6 @@ test('test `translateData` function', () => {
     }
 );
 
-test('test EAPR function with non-zero outstanding Balance', () => {
-    // Define a simple quadratic function with roots at x = ±2
-    let cf = {columns: ["t", "payments", "interest_to_pay", "amort", "balance"], index: [0, 1], data: [[0, -1000, 0, 0, 1000], [1, 1100, 100, 1000, 100]]};
-    let tcf = translateData(cf);
-    let ob = 
-    //let ob = outstandingBalanceAsCF(translateData(cf, 'balance'));
-    expect(ob).toEqual(100);
-    //let ecf = addCashFlowJSONs(tcf, ob);
-    //let eapr = EAPR(ecf);
-    //expect(eapr).toBeCloseTo(0.1); // Expect to be close to 2
-
-});
-
 test('test NPV function', () => {
     let cf = {columns: ["t", "payments", "interest_to_pay", "amort", "balance"], data: [[0, -1000, 0, 0, 1000], [1, 1100, 100, 1000, 0]]};
     let npv = NPV(translateData(cf), .1);

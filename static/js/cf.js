@@ -285,7 +285,6 @@ function generatePFkpiTable(data) {
     // Add the outstanding balance to the last payment
     translatedData[lastIndex].payments += outstandingBalance;
 
-    //let ob = outstandingBalanceAsCF(data);
     //let translatedData = translateData(addCashFlowJSONs(data, ob));
     console.log('generatePFkpiTable/translatedData', translatedData);
       // Assuming the functions and data are already defined and calculated
@@ -318,5 +317,5 @@ function generatePFkpiTable(data) {
   }
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { fprime, find_root, EAPR, addCashFlowJSONs, translateData, NPV, outstandingBalanceAsCF };
+    module.exports = { fprime, find_root, EAPR, addCashFlowJSONs, translateData, NPV};
 }
