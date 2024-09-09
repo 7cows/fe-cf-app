@@ -728,56 +728,6 @@ function createCFDropdown() {
   }
 }
 
-function handleDropdownItemClick(e) {
-  e.preventDefault();
-  let key = $(this).data('key');
-
-  // Determine the current view (Aggregated or Disaggregated)
-  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
-
-  let dataToRender;
-  let n;
-
-  if (aggDisaggKey === 'aggregated') {
-    // Use aggregated data
-    dataToRender = key === 'sum' ? sumCashFlows : cashFlows[key];
-  } else {
-    // Use disaggregated data
-    dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
-  }
-  n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr), 'table table-hover');
-  $('#cfDropdownButton').data('key', key); // Store the selected key in the button's data
-  $('#raster-placeholder').html(renderedRaster);
-}
-
-function handleAggDisaggDropdownItemClick(e) {
-  e.preventDefault();
-
-  // Retrieve the currently selected key from the cash flows dropdown
-  let cfKey = $('#cfDropdownButton').data('key') || 'sum';
-  let aggDisaggKey = $(this).data('key');
-
-  let dataToRender;
-  let n;
-
-  if (cfKey === 'sum') {
-    // If 'sum' is selected in the cash flows dropdown
-    dataToRender = aggDisaggKey === 'aggregated' ? sumCashFlows : sumDisaggCashFlows;
-  } else {
-    // If a specific cash flow ID is selected in the cash flows dropdown
-    dataToRender = aggDisaggKey === 'aggregated' ? cashFlows[cfKey] : disaggCashFlows[cfKey];
-  }
-  n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr), 'table table-hover');
-  $('#raster-placeholder').html(renderedRaster);
-
-  // Update text of the button to reflect the selected view
-  $('#aggDisaggDropdownButton').text($(this).text());
-  // Store the selected key in aggDisaggDropdownButton's data
-  $('#aggDisaggDropdownButton').data('key', $(this).data('key'));
-}
-
 function set_pf_permahash(hash, P0s, HOST_URL, desc) {
   var descParam = desc ? '&desc=' + encodeURIComponent(desc) : '';
   var hashLink = 'Portfolio link: <a href="' + HOST_URL + '/PF/' + hash + '?P0=' + P0s + descParam + '">' + replaceMiddle(hash) + '</a>';
@@ -838,25 +788,6 @@ function downloadCSVFile(csv) {
   $('body').append(downloadLink);
   downloadLink[0].click();
   downloadLink.remove();
-}
-
-function expandRasterBeforeDownload() {
-  // Simulate the behavior of expanding the table programmatically
-  let key = $('#cfDropdownButton').data('key') || 'sum';
-  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
-
-  let dataToRender;
-  let n;
-
-  if (aggDisaggKey === 'aggregated') {
-    dataToRender = key === 'sum' ? sumCashFlows : cashFlows[key];
-  } else {
-    dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
-  }
-
-  n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr, false), 'table table-hover'); // Full expansion
-  $('#raster-placeholder').html(renderedRaster);
 }
 
 function downloadCSV(currencySign = '$') {
@@ -1003,26 +934,67 @@ function displayLinkAndQRCode(identifier, hashLink) {
   }
 }
 
-function handleRasterExpandClick(e) {
-  e.preventDefault();
-
-  // Retrieve the current table's key and aggregation state
-  let key = $('#cfDropdownButton').data('key') || 'sum';
-  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
-
+function renderTable(cfKey, aggDisaggKey, sparse = true) {
+  // Determine the data to render based on the selected key and aggregation state
   let dataToRender;
   let n;
 
   if (aggDisaggKey === 'aggregated') {
-    dataToRender = key === 'sum' ? sumCashFlows : cashFlows[key];
+    dataToRender = cfKey === 'sum' ? sumCashFlows : cashFlows[cfKey];
   } else {
-    dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
+    dataToRender = cfKey === 'sum' ? sumDisaggCashFlows : disaggCashFlows[cfKey];
   }
 
-  // Use full expansion by setting sparse to false
   n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
-  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr, false), 'table table-hover');
+  
+  // Render the raster using the data, and pass the sparse parameter
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr, sparse), 'table table-hover');
 
-  // Replace the current table with the expanded one
+  // Replace the current table with the new one
   $('#raster-placeholder').html(renderedRaster);
 }
+
+function handleRasterExpandClick(e) {
+  e.preventDefault();
+
+  let key = $('#cfDropdownButton').data('key') || 'sum';
+  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
+
+  // Call the base function with sparse = false for full expansion
+  renderTable(key, aggDisaggKey, false);
+}
+
+function handleDropdownItemClick(e) {
+  e.preventDefault();
+  let key = $(this).data('key');
+  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
+
+  // Call the base function with sparse = true (default behavior)
+  renderTable(key, aggDisaggKey);
+
+  // Store the selected key in the button's data
+  $('#cfDropdownButton').data('key', key);
+}
+
+function handleAggDisaggDropdownItemClick(e) {
+  e.preventDefault();
+
+  let cfKey = $('#cfDropdownButton').data('key') || 'sum';
+  let aggDisaggKey = $(this).data('key');
+
+  // Call the base function with sparse = true (default behavior)
+  renderTable(cfKey, aggDisaggKey);
+
+  // Update text of the button to reflect the selected view
+  $('#aggDisaggDropdownButton').text($(this).text());
+  $('#aggDisaggDropdownButton').data('key', aggDisaggKey);
+}
+
+function expandRasterBeforeDownload() {
+  let key = $('#cfDropdownButton').data('key') || 'sum';
+  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
+
+  // Call the base function with sparse = false for full expansion before download
+  renderTable(key, aggDisaggKey, false);
+}
+
