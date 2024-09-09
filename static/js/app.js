@@ -634,7 +634,13 @@ function htmlizeTable(dataObj, tableClass) {
   dataObj.data.forEach(row => {
     let tableRow = $('<tr></tr>');
     row.forEach(cell => {
-      tableRow.append($('<td></td>').text(cell).css('text-align', 'center'));
+      if (cell === '...') {
+        // Create the expand icon without attaching the event directly here
+        let expandIcon = $('<a href="#"><i class="bi bi-chevron-expand"></i></a>').css('cursor', 'pointer');
+        tableRow.append($('<td></td>').html(expandIcon).css('text-align', 'center'));
+      } else {
+        tableRow.append($('<td></td>').text(cell).css('text-align', 'center'));
+      }
     });
     tbody.append(tableRow);
   });
@@ -642,6 +648,11 @@ function htmlizeTable(dataObj, tableClass) {
   table.append(thead).append(tbody);
   return table.prop('outerHTML'); // Get string representation of the table
 }
+
+// Event delegation: Attach the click event to a parent container (e.g., '#raster-placeholder')
+$(document).on('click', '.bi-chevron-expand', function(e) {
+  handleRasterExpandClick(e);
+});
 
   
 validateInputs = function(productId){
@@ -761,8 +772,6 @@ function handleAggDisaggDropdownItemClick(e) {
   let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr), 'table table-hover');
   $('#raster-placeholder').html(renderedRaster);
 
-
-
   // Update text of the button to reflect the selected view
   $('#aggDisaggDropdownButton').text($(this).text());
   // Store the selected key in aggDisaggDropdownButton's data
@@ -810,6 +819,7 @@ function get_descs(cashFlows){
 }
 
 function downloadCSVFile(csv) {
+  expandRasterBeforeDownload();
   var now = new Date();
   var timestamp = now.getFullYear().toString() + 
                   ('0' + (now.getMonth() + 1)).slice(-2) + 
@@ -828,6 +838,25 @@ function downloadCSVFile(csv) {
   $('body').append(downloadLink);
   downloadLink[0].click();
   downloadLink.remove();
+}
+
+function expandRasterBeforeDownload() {
+  // Simulate the behavior of expanding the table programmatically
+  let key = $('#cfDropdownButton').data('key') || 'sum';
+  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
+
+  let dataToRender;
+  let n;
+
+  if (aggDisaggKey === 'aggregated') {
+    dataToRender = key === 'sum' ? sumCashFlows : cashFlows[key];
+  } else {
+    dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
+  }
+
+  n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr, false), 'table table-hover'); // Full expansion
+  $('#raster-placeholder').html(renderedRaster);
 }
 
 function downloadCSV(currencySign = '$') {
@@ -974,3 +1003,26 @@ function displayLinkAndQRCode(identifier, hashLink) {
   }
 }
 
+function handleRasterExpandClick(e) {
+  e.preventDefault();
+
+  // Retrieve the current table's key and aggregation state
+  let key = $('#cfDropdownButton').data('key') || 'sum';
+  let aggDisaggKey = $('#aggDisaggDropdownButton').data('key') || 'aggregated';
+
+  let dataToRender;
+  let n;
+
+  if (aggDisaggKey === 'aggregated') {
+    dataToRender = key === 'sum' ? sumCashFlows : cashFlows[key];
+  } else {
+    dataToRender = key === 'sum' ? sumDisaggCashFlows : disaggCashFlows[key];
+  }
+
+  // Use full expansion by setting sparse to false
+  n = aggDisaggKey === 'aggregated' ? 1 : get_max_n();
+  let renderedRaster = htmlizeTable(renderRaster(dataToRender, n, translations, curr, false), 'table table-hover');
+
+  // Replace the current table with the expanded one
+  $('#raster-placeholder').html(renderedRaster);
+}

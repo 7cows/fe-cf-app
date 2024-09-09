@@ -121,6 +121,29 @@ function setCurrency(currency) {
     reGenerateUI();
 }
 
+function sparseTable(dataObject) {
+    let data = dataObject.data;
+    let columns = dataObject.columns;
+    let rowCount = data.length;
+    
+    // Create a new data array with only the first two, last two rows and the middle row with `...`
+    let sparseData = [
+        data[0], // First row
+        data[1], // Second row
+        // Middle row with '...'
+        Array(columns.length).fill('').map((_, i) => (i === 0 ? '...' : '')),
+        data[rowCount - 2], // Second to last row
+        data[rowCount - 1]  // Last row
+    ];
+
+    // Return a new object with the same columns and the sparse data
+    return {
+        columns: columns,
+        data: sparseData,
+        index: [0, 1, '...', rowCount - 2, rowCount - 1] // Updated index
+    };
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { replaceMiddle, roundToNDigits, extractSortedValuesByKeys, filterAndLimitString, parseStringArray, fetchTranslations };
 }

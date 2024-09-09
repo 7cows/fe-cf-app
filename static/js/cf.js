@@ -78,8 +78,15 @@ function addCashFlowJSONs(cf1, cf2) {
     };
 }
 
-function renderRaster(_raster, n = 1, translations = {}, curr = '$') {
-    let raster = JSON.parse(JSON.stringify(_raster));
+function renderRaster(_raster, n = 1, translations = {}, curr = '$', sparse = true) {
+    let raster;
+    
+    if (sparse) {
+        raster = JSON.parse(JSON.stringify(sparseTable(_raster)));
+    } else {
+        raster = JSON.parse(JSON.stringify(_raster));
+    }
+
     // cast n to number
     n = Number(n);
     console.log('renderRaster/Rendering raster', raster);
@@ -99,8 +106,9 @@ function renderRaster(_raster, n = 1, translations = {}, curr = '$') {
 
     // Function to format numbers as currency
     function formatCurrency(value) {
-        return curr + Number(value).toFixed(2);
+        return curr + Number(value).toFixed(2); // Format the value as currency
     }
+    
 
     // Modify column names and add new columns if needed
     let tIndex = raster.columns.indexOf('t');
@@ -122,6 +130,9 @@ function renderRaster(_raster, n = 1, translations = {}, curr = '$') {
     raster.data = raster.data.map(row => {
         let newRow = [...row];
         if (tIndex !== -1) {
+            if (newRow[tIndex] === '...') {
+                return newRow;
+            }
             let year = Math.floor(newRow[tIndex]);
             
 
