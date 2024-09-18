@@ -125,7 +125,10 @@ function sparseTable(dataObject) {
     let data = dataObject.data;
     let columns = dataObject.columns;
     let rowCount = data.length;
-    
+    console.log("sparseTable/rowCount", rowCount);
+    if (rowCount < 7){
+        return dataObject;
+    }
     // Create a new data array with only the first two, last two rows and the middle row with `...`
     let sparseData = [
         data[0], // First row

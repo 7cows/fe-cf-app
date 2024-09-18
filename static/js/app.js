@@ -265,6 +265,10 @@ populateForm = function(productId, params) {
   } else if (params.product == 'deposit'){
     console.log("populateForm/params.product", params.product);
     console.log('.rd-switch[data-value="'+ productId + '"]');
+    $('.rd-switch[data-value="'+ productId + '"]').click();
+  } else if (params.product == '0bond-switch'){
+    console.log("populateForm/params.product", params.product);
+    $('.0bond-switch[data-value="'+ productId + '"]').click();
   }
 
   console.log("populateForm/params.free_param", params.free_param);
@@ -327,7 +331,9 @@ function extractParams(productId) {
       params.product = 'annuity';
   } else if ($('.rd-switch[data-value="' + productId + '"]').is(':checked')) {
       params.product = 'deposit';
-  }
+  } else if ($('.0bond-switch[data-value="' + productId + '"]').is(':checked')) {
+      params.product = '0bond';
+}
 
   // Deduce free_param based on the radio button checked status
   if (true) {
@@ -662,19 +668,22 @@ validateInputs = function(productId){
 function handleAnnuityClick(e) {
   e.preventDefault();
   var productId = $(this).closest('.dropdown').find('button[id^="dropdownProductButton-"]').attr('id').split('-')[1];
-  // Your logic for handling annuity click
   console.log("Annuity Clicked for ID:", productId);
   $('#productType-' + productId).val('annuity');
-  // Additional logic...
 }
 
 function handleRecurringDepositClick(e) {
   e.preventDefault();
   var productId = $(this).closest('.dropdown').find('button[id^="dropdownProductButton-"]').attr('id').split('-')[1];
-  // Your logic for handling annuity click
   console.log("RD Clicked for ID:", productId);
   $('#productType-' + productId).val('deposit');
-  // Additional logic...
+}
+
+function handle0bondClick(e) {
+  e.preventDefault();
+  var productId = $(this).closest('.dropdown').find('button[id^="dropdownProductButton-"]').attr('id').split('-')[1];
+  console.log("0bond Clicked for ID:", productId);
+  $('#productType-' + productId).val('0bond');
 }
 
 function createCFDropdown() {

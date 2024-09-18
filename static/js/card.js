@@ -289,7 +289,10 @@ const htmlElements = {
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownProductButton-${id}">
                                     <a class="dropdown-item annuity-switch" href="#" data-value="${id}">${translations['Amortizing loan']}</a>
-                                    <!--<a class="dropdown-item rd-switch" href="#" data-value="${id}">${translations['Savings plan']}</a>-->
+                                    <!--
+                                    <a class="dropdown-item rd-switch" href="#" data-value="${id}">${translations['Savings plan']}</a>
+                                    <a class="dropdown-item 0bond-switch" href="#" data-value="${id}">${translations['Zero bond']}</a>
+                                    -->
                                 </div>
                             </div>
                                 <a data-toggle="collapse" data-target="#collapseAnnuity-${id}" href="#collapseAnnuity-${id}" class="" aria-expanded="true">

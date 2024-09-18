@@ -21,6 +21,7 @@ def get_translations():
             'Example',
             'Amortizing loan',
             'Savings plan',
+            'Zero bond',
             "The total amount of money borrowed or the remaining loan balance you need to repay",
             "The percentage charged on the principal by the lender, representing the cost of borrowing",
             "The period until the final payment is due",

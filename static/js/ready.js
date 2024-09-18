@@ -12,7 +12,8 @@ $(document).ready(function() {
         'year-item': clickYearsDropdown,
         'month-item': clickMonthsDropdown,
         'annuity-switch': handleAnnuityClick,
-        'rd-switch': handleRecurringDepositClick
+        'rd-switch': handleRecurringDepositClick,
+        '0bond-switch': handle0bondClick
     };
 
     // Additional classes to loop through
@@ -72,6 +73,9 @@ $(document).ready(function() {
         } else if (productType === 'deposit') {
             element.textContent = translations['Savings plan'];
             element.setAttribute('data-product-type', 'deposit');
+        } else if (productType === '0bond') {
+            element.textContent = translations['Zero bond'];
+            element.setAttribute('data-product-type', '0bond');
         }
     }
     $('#pagination .page-item.active a').trigger('click');

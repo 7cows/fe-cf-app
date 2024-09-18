@@ -80,7 +80,6 @@ function addCashFlowJSONs(cf1, cf2) {
 
 function renderRaster(_raster, n = 1, translations = {}, curr = '$', sparse = true) {
     let raster;
-    
     if (sparse) {
         raster = JSON.parse(JSON.stringify(sparseTable(_raster)));
     } else {
