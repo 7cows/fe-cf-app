@@ -27,6 +27,7 @@ def get_translations():
             "The period until the final payment is due",
             "The amount of money paid back to the lender at regular intervals",
             "How often payments are made, e.g., monthly or quarterly, affecting the total interest paid and the speed of loan repayment.",
+            "The portion of the loan that is repaid at the beginning, reducing the outstanding principal and determining the overall repayment schedule.",
             "calculate the visible loan, fill derived parameter and update KPIs",
             "a random example of a loan",
             "Maximum number of products",
@@ -37,7 +38,7 @@ def get_translations():
             "Sum of Cash Flows",
             "Cash Flow",
             "Year", "Month", "Quarter", "Payments", "Interest to Pay", "Amortization", "Outstanding Balance",
-            "Monthly", "Quarterly", "Semi-annually", "Annually",
+            "Monthly", "Quarterly", "Semi-annually", "Annually", "Initial repayment"
             ]
     translations |= {el: tr(el) for el in lst}
     return translations

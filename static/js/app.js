@@ -93,7 +93,8 @@ chooseAnnFreeParameter = function(radio, productId) {
     'T_YearsDropdown',
     'T_MonthsDropdown',
     'T_Slider',
-    'remainingDebtDisplay'
+    'remainingDebtDisplay',
+    'ir'
   ];
 
   // Loop through each prefix and update the prop
@@ -121,6 +122,9 @@ chooseAnnFreeParameter = function(radio, productId) {
       $('#T_YearsDropdown-' + productId).prop('disabled', true);
       $('#T_MonthsDropdown-' + productId).prop('disabled', true);
       $('#T_Slider-' + productId).prop('disabled', true);
+      break;
+    case "rbir-" + productId:
+      $('#ir-' + productId).prop('disabled', true);
       break;
   }
 }
@@ -241,6 +245,7 @@ populateForm = function(productId, params) {
 
   // Text and Hidden Inputs
   $('#r-' + productId).val(roundToNDigits(params.r*100, APR_rounding_digits));
+  $('#ir-' + productId).val(roundToNDigits(params.ir*100, APR_rounding_digits));
   $('#n-' + productId).val(params.n);
   $('#T_years-' + productId).val(params.T_years);
   $('#T_months-' + productId).val(params.T_months);
@@ -273,7 +278,7 @@ populateForm = function(productId, params) {
 
   console.log("populateForm/params.free_param", params.free_param);
   // TODO: This is a temporary solution, replace a consistent way for maturity/T key
-  let freeParamId = params.free_param == 'maturity' ?  'rbT-' + productId : 'rb' + params.free_param + '-' + productId;
+  let freeParamId = params.free_param == 'T' ?  'rbT-' + productId : 'rb' + params.free_param + '-' + productId;
   console.log("populateForm/freeParamId", freeParamId);
   $('#' + freeParamId).click();
   
@@ -333,19 +338,24 @@ function extractParams(productId) {
       params.product = 'deposit';
   } else if ($('.0bond-switch[data-value="' + productId + '"]').is(':checked')) {
       params.product = '0bond';
-}
-
-  // Deduce free_param based on the radio button checked status
-  if (true) {
-    params.freeParam = $('#rbP0-' + productId).is(':checked') ? 'P0' :
-    $('#rbT-' + productId).is(':checked') ? 'maturity' :
-    $('#rbA-' + productId).is(':checked') ? 'A' :
-    $('#rbr-' + productId).is(':checked') ? 'r' :
-    $('#rbremainingDebt-' + productId).is(':checked') ? 'remainingDebt' : 'r';
-    assignIfValid('free_param', params.freeParam);
-  } else {
-    params.freeParam = 'r';
   }
+
+
+  let freeParams = ['P0', 'T', 'A', 'r', 'remainingDebt', 'ir'];
+
+  // Default value for freeParam
+  params.freeParam = 'r'; 
+  
+  freeParams.forEach(param => {
+      if ($('#rb' + param + '-' + productId).is(':checked')) {
+          params.freeParam = param;
+      }
+  });
+  // legacy:
+  if (params.freeParam == 'T') params.freeParam = 'maturity';
+
+  assignIfValid('free_param', params.freeParam);
+  
   params.permahash = hashes[productId];
   return params;
 }
@@ -371,7 +381,8 @@ function processData(productId) {
     { key: 'shift_years' },
     { key: 'shift_months' },
     { key: 'remainingDebt', display: true },
-    { key: 'minPayment', display: true }
+    { key: 'minPayment', display: true },
+    { key: 'ir', isPercentage: true }, 
     //{ key: 'form_settings' },
   ];
 

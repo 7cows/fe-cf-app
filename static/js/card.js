@@ -1,4 +1,4 @@
-const elementKeys = ['P0', 'short_desc', 'r', 'T', 'A', 'n','shift', 'minimumPayment', 'compounding', 'remaining_debt','paydown'];
+const elementKeys = ['P0', 'short_desc', 'r', 'T', 'A', 'n','shift', 'minimumPayment', 'compounding', 'remaining_debt','paydown', 'init_repayment'];
 
 function constructFormElementsHtml(id, settings, translations, pivot) {
     let formElements = getFormElements(id, translations);        
@@ -206,6 +206,22 @@ function getFormElements(id, translations){
             <td class="col-md-6"><input class="form-check-input" type="checkbox" value="" id="zeropaydown-${id}" checked></td>
             <td class="col-md-2"></td>
         </tr>        
+        `,
+        'init_repayment': `
+        <tr>
+            <td class="col-md-4">
+                <strong>
+                    ${translations['Initial repayment']}:
+                </strong>
+            </td>
+            <td class="col-md-6">
+                <div class="input-sign-wrapper" data-sign="%">
+                <input type="text" id="ir-${id}" class="form-control" value="" placeholder="e.g. 3"
+                data-toggle="tooltip" title="${translations['The portion of the loan that is repaid at the beginning, reducing the outstanding principal and determining the overall repayment schedule.']}" data-placement='left'>
+                </div>
+            </td>
+            <td class="col-md-2"><input type="radio" id="rbir-${id}" name="AnnuityFreeParameter" value="6" onclick="chooseAnnFreeParameter(this, ${id});"></td>
+        </tr>
         `}
         return dct;
 }
