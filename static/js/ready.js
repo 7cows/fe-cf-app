@@ -17,17 +17,38 @@ $(document).ready(function() {
     };
 
     // Additional classes to loop through
-    const additionalClasses = ['T_', 'shift'];
+    const additionalClasses = ['T_', 'shift_'];
+
+    $.each(handlers, function(baseClass, handler) {
+        // Attach the base handler without a prefix
+        
+    
+        // If the handler supports prefixes, handle additional classes
+        if (['year-item', 'month-item'].includes(baseClass)) {
+            // Loop through additional classes and attach handlers with prefixes
+            additionalClasses.forEach(prefix => {
+                $(document).on('click', `.${baseClass}.${prefix}`, function(e) {
+                    //e.preventDefault();    
+                    handler.call(this, e, prefix);
+                });
+            });
+        } else {
+            $(document).on('click', `.${baseClass}`, handler);
+        }
+    });
+
 
     // Loop through each handler
     $.each(handlers, function(baseClass, handler) {
-        // Attach the base handler
-        $(document).on('click', `.${baseClass}`, handler);
-
-        // Loop through additional classes and attach handlers
-        additionalClasses.forEach(additionalClass => {
-            $(document).on('click', `.${baseClass}.${additionalClass}`, handler);
-        });
+        if (['year-item', 'month-item'].includes(baseClass)) {
+            // Loop through additional classes and attach handlers
+            additionalClasses.forEach(additionalClass => {
+                $(document).on('click', `.${baseClass}.${additionalClass}`, handler);
+            });
+        } else {
+            // Attach the base handler
+            $(document).on('click', `.${baseClass}`, handler);
+        }
     });
 
     // Initialize tooltips
