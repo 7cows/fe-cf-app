@@ -3,7 +3,7 @@ describe('Visit 7cows and interact', () => {
     cy.visit('/cf');
     cy.get('#example-btn-1').click();
 
-    cy.wait(1000); // wait for any updates
+    cy.wait(500); // wait for any updates
 
     cy.get('body').then(() => {
       const aDisplayVal = Cypress.$('#ADisplay-1').val();

@@ -31,7 +31,7 @@ describe('Test calculation with user input', () => {
     cy.get('#search-btn-1').click();
 
     // Wait for calculations to complete
-    cy.wait(1000);
+    cy.wait(500);
 
     // Check that the value of 'ADisplay-1' is approximately 900
     cy.get('#ADisplay-1').should('have.value', '900');
