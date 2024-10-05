@@ -129,7 +129,7 @@ chooseAnnFreeParameter = function(radio, productId) {
   }
 }
 
-function clickDropdown(e, type) {
+function clickDropdown(e, type, prefix = "T_") {
   e.preventDefault();  // prevent the default anchor link behavior
   
   var selectedValue = $(this).attr('data-value');  // get the value from the clicked item
@@ -142,13 +142,13 @@ function clickDropdown(e, type) {
   $("#loanMaturity" + (isYear ? 'Years' : 'Months') + "-" + productId).val(selectedValue);
   
   // Update the button text to reflect the chosen value
-  $("#" + (isYear ? 'T_YearsDropdown' : 'T_MonthsDropdown') + "-" + productId).text(selectedValue + (selectedValue === "1" ? ' ' + type : ' ' + type + 's'));
+  $("#" + (isYear ? prefix + 'YearsDropdown' : prefix + 'MonthsDropdown') + "-" + productId).text(selectedValue + (selectedValue === "1" ? ' ' + type : ' ' + type + 's'));
   
   // Calculate the new slider value
   if (isYear) {
-    $("#T_Slider-" + productId).val(selectedValue * 12 + parseInt($("#T_months-" + productId).val()));
+    $("#" + prefix + "Slider-" + productId).val(selectedValue * 12 + parseInt($("#" + prefix + "months-" + productId).val()));
   } else {
-    $("#T_Slider-" + productId).val(parseInt($("#T_years-" + productId).val()) * 12 + parseInt(selectedValue));
+    $("#" + prefix + "Slider-" + productId).val(parseInt($("#" + prefix + "years-" + productId).val()) * 12 + parseInt(selectedValue));
   }
 }
 
@@ -158,7 +158,7 @@ function clickTimeDropdown(e, mainTimeUnit, prefix = "T_") {
   e.preventDefault();
 
   let secondaryTimeUnit = mainTimeUnit === 'year' ? 'month' : 'year';
-  clickDropdown.call(this, e, mainTimeUnit);
+  clickDropdown.call(this, e, mainTimeUnit, prefix);
 
   var selectedMainUnit = $(this).data('value');
   var productId = $(this).closest('.dropdown').find('button[id^="' + prefix + capitalizeFirstLetter(mainTimeUnit) + 'sDropdown-"]').attr('id').split('-')[1];
@@ -187,7 +187,7 @@ clickYearsDropdown = function(e, prefix = "T_") {
   e.preventDefault();
   let main_time_unit = 'year';
   let secondary_time_unit = 'month';
-  clickDropdown.call(this, e, main_time_unit);
+  clickDropdown.call(this, e, main_time_unit, prefix);
   var selectedMainUnit = $(this).data('value');
   var productId = $(this).closest('.dropdown').find('button[id^="' + prefix + 'YearsDropdown-"]').attr('id').split('-')[1];
   
@@ -206,7 +206,7 @@ clickMonthsDropdown = function(e, prefix = "T_") {
   e.preventDefault();
   let main_time_unit = 'month';
   let secondary_time_unit = 'year';
-  clickDropdown.call(this, e, main_time_unit);
+  clickDropdown.call(this, e, main_time_unit, prefix);
   var selectedMainUnit = $(this).data('value');
   var productId = $(this).closest('.dropdown').find('button[id^="' + prefix + 'MonthsDropdown-"]').attr('id').split('-')[1];
   
@@ -256,6 +256,18 @@ populateForm = function(productId, params) {
   
   // Range Slider
   $('#T_Slider-' + productId).val(params.T_years * 12 + params.T_months);
+
+
+  $('#shift_years-' + productId).val(params.shift_years);
+  $('#shift_months-' + productId).val(params.shift_months);
+  
+  // Dropdown buttons
+  $('#shift_YearsDropdown-' + productId).text(params.shift_years + ' year' + (params.shift_years > 1 ? 's' : ''));
+  $('#shift_MonthsDropdown-' + productId).text(params.shift_months + ' month' + (params.shift_months !== 1 ? 's' : ''));
+  
+  // Range Slider
+  $('#shift_Slider-' + productId).val(params.shift_years * 12 + params.shift_months);
+
   
   // Frequency Label and Slider
   let frequencyLabel = 'Monthly';
