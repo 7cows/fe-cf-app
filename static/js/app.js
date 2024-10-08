@@ -409,8 +409,13 @@ function processData(productId) {
     if (isDisabled) {
         value = '';
     } else if (value === '') {
-
         missingData.push(key + (display ? 'Display' : ''));
+    }
+    if (display){
+      // TODO: before sending the data to the backend, format the numbers since it assigns the values to the hidden elements
+      // otherwise there's a problem if the user edits already formatted number and doesn't blur away from the numerical field before clicking the 'Calculate button'
+      // command to start with (which doesn't work as is):
+      //formatValue('#' + key + 'Display-' + productId,  '#' + key + '-' + productId);
     }
 
     if (isPercentage && !isDisabled) {
@@ -641,7 +646,8 @@ function hookFormEventsForProduct(productId) {
 function formatValue(inputElement, hiddenElement) {
   var value = inputElement.value.replace(/[',]/g, '');
   if (!isNaN(value) && value.trim() !== '') {
-    inputElement.value = parseFloat(value).toLocaleString('de-CH', {
+    var userLocale = navigator.language || 'de-CH';
+    inputElement.value = parseFloat(value).toLocaleString(userLocale, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
