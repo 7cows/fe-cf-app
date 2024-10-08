@@ -55,7 +55,8 @@
     {% for param in params %}
       
       {% if param.form_settings %}
-      card_settings = "{{ param['form_settings'] }}";
+        card_settings = "{{ param['form_settings'] }}";
+        form_settings = card_settings;
       {% else %}
         card_settings = form_settings;
       {% endif %}
