@@ -16,6 +16,11 @@ $(document).ready(function() {
         '0bond-switch': handle0bondClick
     };
 
+    // check if it runs on mobile platform
+    function isMobile() {
+        return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
     // Additional classes to loop through
     const additionalClasses = ['T_', 'shift_'];
 
@@ -60,7 +65,10 @@ $(document).ready(function() {
         btn.text($(this).text());
         inputHidden.val($(this).data('value'));
     });
-    
+    if (isMobile()){
+        $('[data-toggle="tooltip"]').tooltip('disable');
+    }
+
     // Assuming that productId is related to a form. 
     // This will get productId from the first form on the page.
     let productId = $('form').find('[id^="search-btn-"]').data('product-id');
